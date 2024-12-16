@@ -5,8 +5,6 @@ class SelectField extends StatelessWidget {
   const SelectField({
     required this.callback,
     required this.text,
-    this.inactiveCallback,
-    this.onLongPressCallback,
     super.key,
     required this.backgroundColor,
     this.borderColor =Colors.red,
@@ -19,8 +17,6 @@ class SelectField extends StatelessWidget {
   });
 
   final VoidCallback callback;
-  final VoidCallback? inactiveCallback;
-  final VoidCallback? onLongPressCallback;
   final String text;
   final Color backgroundColor;
   final Color fontColor;
