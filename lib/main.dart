@@ -1,42 +1,38 @@
-
 import 'package:flutter/material.dart';
-import 'package:loco2012/widgets/selectField.dart';
+import 'package:loKo_2012/widgets/selectField.dart';
 
 
 void main() {
-  runApp(MyApp());
+  runApp(const LokoApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-//  final _appRouter = AppRouter();
+class LokoApp extends StatelessWidget {
+  const LokoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-     // routerConfig: _appRouter.config(),
-      title: 'Loco2012',
+    return MaterialApp(
+      title: 'Loko2012',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      home: const Dashboard(title: 'Loko2012'),
     );
   }
 }
 
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key, required this.title});
 
 
   final String title;
 
   @override
-  State<HomePage> createState() => _MyHomePageState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _MyHomePageState extends State<HomePage> {
+class _DashboardState extends State<Dashboard> {
 
 
 
@@ -65,10 +61,7 @@ class _MyHomePageState extends State<HomePage> {
               SelectField(callback: (){}, text: "Розклад на тиждень",
                 backgroundColor: Colors.green,),
               const SizedBox(height: 54,),
-              SelectField(callback: (){
-              //  AutoRouter.of(context).
-              //push(const TeamCompositionRoute());
-                }, text: "Склади команд",
+              SelectField(callback: (){}, text: "Склади команд",
                 backgroundColor: Colors.green,),
               const SizedBox(height: 54,),
               SelectField(callback: (){}, text: "Тренери",
