@@ -1,17 +1,17 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
-@RoutePage(name: 'ScheduleRoute')
-class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({
+@RoutePage(name: 'UsefulLinksRoute')
+class UsefulLinksScreen extends StatefulWidget {
+  const UsefulLinksScreen({
     super.key,
   });
 
   @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState();
+  State<UsefulLinksScreen> createState() => _UsefulLinksScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _UsefulLinksScreenState extends State<UsefulLinksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +21,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         backgroundColor: Colors.red,
         titleTextStyle: const TextStyle(
             color: Colors.green, fontSize: 40, fontWeight: FontWeight.w600),
-        title: const Text("Розклад на тиждень",
+        title: const Text("Корисні посилання",
             style: TextStyle(
                 color: Colors.green,
                 fontSize: 40,

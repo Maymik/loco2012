@@ -1,83 +1,21 @@
-// import 'package:auto_route/auto_route.dart';
-// import 'package:flutter/material.dart';
-//
-// import '../widgets/selec_field.dart';
-//
-// @RoutePage()
-// class DashboardScreen extends StatefulWidget {
-//   const DashboardScreen({super.key, required this.title});
-//
-//
-//   final String title;
-//
-//   @override
-//   State<DashboardScreen> createState() => _DashboardScreenState();
-// }
-//
-// class _DashboardScreenState extends State<DashboardScreen> {
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     return Scaffold(
-//       backgroundColor: Colors.green,
-//
-//
-//       appBar: AppBar(
-//         centerTitle: true,
-//         backgroundColor: Colors.red,
-//         titleTextStyle:  const TextStyle(color: Colors.green,fontSize: 40,
-//             fontWeight: FontWeight.w600),
-//
-//         title: Text(widget.title),
-//       ),
-//       body:  Padding( padding: const EdgeInsets.symmetric(horizontal: 16),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             SelectField(callback: (){}, text: "Останні новини",
-//               backgroundColor: Colors.green,),
-//             const SizedBox(height: 54,),
-//             SelectField(callback: (){}, text: "Розклад на тиждень",
-//               backgroundColor: Colors.green,),
-//             const SizedBox(height: 54,),
-//             SelectField(callback: (){}, text: "Склади команд",
-//               backgroundColor: Colors.green,),
-//             const SizedBox(height: 54,),
-//             SelectField(callback: (){}, text: "Тренери",
-//               backgroundColor: Colors.green,),
-//             const SizedBox(height: 54,),
-//             SelectField(callback: (){}, text: "Наступні турніри"
-//               ,backgroundColor: Colors.green,),
-//             const SizedBox(height: 54,),
-//             SelectField(callback: (){}, text: "Корисні посилання"
-//               ,backgroundColor: Colors.green,),
-//           ],
-//
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../navigation/app_router.gr.dart';
-import '../widgets/selec_field.dart';
+import '../widgets/select_field.dart';
 
 @RoutePage()
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key, });
-
+  const DashboardScreen({
+    super.key,
+  });
 
   static const routeName = 'DashboardScreenRoute';
 
   static Page<dynamic> page() => const MaterialPage<void>(
-    name: routeName,
-    key: ValueKey(routeName),
-    child: DashboardScreen(),
-  );
+        name: routeName,
+        key: ValueKey(routeName),
+        child: DashboardScreen(),
+      );
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -104,44 +42,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SelectField(
-             onTap:   () {
+              onTap: () {
                 context.router.push(const NewsRoute());
               },
               text: "Останні новини",
               backgroundColor: Colors.green,
             ),
-          //  GestureDetector( onTap: () { context.router.push(const NewsRoute());},
-           //     child: Container(width: 30, height: 30,color: Colors.black,)),
             const SizedBox(height: 54),
-            // SelectField(
-            //   callback: () {},
-            //   text: "Розклад на тиждень",
-            //   backgroundColor: Colors.green,
-            // ),
-            // const SizedBox(height: 54),
-            // SelectField(
-            //   callback: () {},
-            //   text: "Склади команд",
-            //   backgroundColor: Colors.green,
-            // ),
-            // const SizedBox(height: 54),
-            // SelectField(
-            //   callback: () {},
-            //   text: "Тренери",
-            //   backgroundColor: Colors.green,
-            // ),
-            // const SizedBox(height: 54),
-            // SelectField(
-            //   callback: () {},
-            //   text: "Наступні турніри",
-            //   backgroundColor: Colors.green,
-            // ),
-            // const SizedBox(height: 54),
-            // SelectField(
-            //   callback: () {},
-            //   text: "Корисні посилання",
-            //   backgroundColor: Colors.green,
-            // ),
+            SelectField(
+              onTap: () {
+                context.router.push(const ScheduleRoute());
+              },
+              text: "Розклад на тиждень",
+              backgroundColor: Colors.green,
+            ),
+            const SizedBox(height: 54),
+            SelectField(
+              onTap: () {
+                context.router.push(const TeamCompositionRoute());
+              },
+              text: "Склади команд",
+              backgroundColor: Colors.green,
+            ),
+            const SizedBox(height: 54),
+            SelectField(
+              onTap: () {
+                context.router.push(const CoachesRoute());
+              },
+              text: "Тренери",
+              backgroundColor: Colors.green,
+            ),
+            const SizedBox(height: 54),
+            SelectField(
+              onTap: () {
+                context.router.push(const TournamentsRoute());
+              },
+              text: "Наступні турніри",
+              backgroundColor: Colors.green,
+            ),
+            const SizedBox(height: 54),
+            SelectField(
+              onTap: () {
+                context.router.push(const UsefulLinksRoute());
+              },
+              text: "Корисні посилання",
+              backgroundColor: Colors.green,
+            ),
           ],
         ),
       ),
