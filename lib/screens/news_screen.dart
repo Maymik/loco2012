@@ -39,17 +39,17 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
-@RoutePage()
+@RoutePage(name: 'NewsRoute')
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
 
-  static const routeName = 'NewsScreenRoute';
+  //static const routeName = 'NewsScreenRoute';
 
-  static Page<dynamic> page() => const MaterialPage<void>(
-    name: routeName,
-    key: ValueKey(routeName),
-    child: NewsScreen(),
-  );
+  // static Page<dynamic> page() => const MaterialPage<void>(
+  //   name: routeName,
+  //   key: ValueKey(routeName),
+  //   child: NewsScreen(),
+  // );
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();
