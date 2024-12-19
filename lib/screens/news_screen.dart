@@ -1,39 +1,3 @@
-// import 'package:auto_route/annotations.dart';
-// import 'package:flutter/material.dart';
-//
-// @RoutePage(name: 'NewsRoute')
-// class NewsScreen extends StatefulWidget {
-//   const NewsScreen({super.key});
-//
-//   @override
-//   State<NewsScreen> createState() => _NewsScreenState();
-// }
-//
-// class _NewsScreenState extends State<NewsScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.green,
-//       appBar: AppBar(
-//         centerTitle: true,
-//         backgroundColor: Colors.red,
-//         titleTextStyle: const TextStyle(
-//           color: Colors.green,
-//           fontSize: 40,
-//           fontWeight: FontWeight.w600,
-//         ),
-//         title: const Text(
-//           "Останні новини",
-//           style: TextStyle(
-//             color: Colors.green,
-//             fontSize: 40,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../navigation/app_router.gr.dart';
@@ -51,6 +15,7 @@ class _NewsScreenState extends State<NewsScreen> {
   int _currentIndex = 0;
 
   final List<PageRouteInfo> _routes = [
+    const DashboardRoute(),
     const NewsRoute(),
     const ScheduleRoute(),
     const TeamCompositionRoute(),
@@ -89,7 +54,7 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       body: const Center(
         child: Text(
-          "Здесь отображается контент новостей",
+          "Останні новини",
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
