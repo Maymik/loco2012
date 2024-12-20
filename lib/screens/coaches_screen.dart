@@ -1,4 +1,3 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -19,26 +18,25 @@ class _CoachesScreenState extends State<CoachesScreen> {
   int _currentIndex = 0;
 
   final List<PageRouteInfo> _routes = [
-    const DashboardRoute(),
     const NewsRoute(),
     const ScheduleRoute(),
     const TeamCompositionRoute(),
     const CoachesRoute(),
     const TournamentsRoute(),
-    const UsefulLinksRoute(),
   ];
 
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      context.router.replace(_routes[index]);
     });
+    context.router.navigate(_routes[index]);
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.red,
         titleTextStyle: const TextStyle(

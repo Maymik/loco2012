@@ -18,13 +18,11 @@ class _UsefulLinksScreenState extends State<UsefulLinksScreen> {
   int _currentIndex = 0;
 
   final List<PageRouteInfo> _routes = [
-    const DashboardRoute(),
     const NewsRoute(),
     const ScheduleRoute(),
     const TeamCompositionRoute(),
     const CoachesRoute(),
     const TournamentsRoute(),
-    const UsefulLinksRoute(),
   ];
 
   void _onTabTapped(int index) {
