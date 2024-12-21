@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../navigation/app_router.gr.dart';
+import '../utils/constants.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'NewsRoute')
@@ -14,22 +14,11 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   int _currentIndex = 0;
 
-  final List<PageRouteInfo> _routes = [
-   // const DashboardRoute(),
-    const NewsRoute(),
-    const ScheduleRoute(),
-    const TeamCompositionRoute(),
-    const CoachesRoute(),
-    const TournamentsRoute(),
-   // const UsefulLinksRoute(),
-  ];
-
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      //  context.router.replace(_routes[index]);
     });
-    context.router.navigate(_routes[index]);
+    context.router.navigate(AppConstants.routes[index]);
   }
 
   @override
@@ -46,7 +35,7 @@ class _NewsScreenState extends State<NewsScreen> {
           fontWeight: FontWeight.w600,
         ),
         title: const Text(
-          "Останні новини",
+          AppConstants.news,
           style: TextStyle(
             color: Colors.green,
             fontSize: 40,
@@ -56,7 +45,7 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       body: const Center(
         child: Text(
-          "Останні новини",
+          AppConstants.news,
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
