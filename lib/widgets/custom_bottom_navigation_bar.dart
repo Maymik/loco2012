@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTabTapped;
@@ -20,34 +22,26 @@ class CustomBottomNavigationBar extends StatelessWidget {
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
       items: const [
-       // BottomNavigationBarItem(
-        //   icon: Icon(Icons.dashboard),
-        //   label: "Дашборд",
-        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.article),
-          label: "Новини",
+          label: AppConstants.news,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.schedule),
-          label: "Розклад",
+          label: AppConstants.schedule,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people),
-          label: "Склади",
+          label: AppConstants.teamComposition,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.school),
-          label: "Тренери",
+          label: AppConstants.coaches,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.sports_soccer),
-          label: "Турніри",
+          label: AppConstants.tournaments,
         ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.link),
-        //   label: "Посилання",
-        // ),
       ],
     );
   }

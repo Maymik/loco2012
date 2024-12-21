@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../navigation/app_router.gr.dart';
+import '../utils/constants.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'ScheduleRoute')
@@ -17,19 +17,11 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   int _currentIndex = 0;
 
-  final List<PageRouteInfo> _routes = [
-    const NewsRoute(),
-    const ScheduleRoute(),
-    const TeamCompositionRoute(),
-    const CoachesRoute(),
-    const TournamentsRoute(),
-  ];
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
-    context.router.navigate(_routes[index]);
-
+    context.router.navigate(AppConstants.routes[index]);
   }
   @override
   Widget build(BuildContext context) {
@@ -41,7 +33,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         backgroundColor: Colors.red,
         titleTextStyle: const TextStyle(
             color: Colors.green, fontSize: 40, fontWeight: FontWeight.w600),
-        title: const Text("Розклад на тиждень",
+        title: const Text(AppConstants.schedule,
             style: TextStyle(
                 color: Colors.green,
                 fontSize: 40,
@@ -49,7 +41,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
       body: const Center(
         child: Text(
-          "Розклад на тиждень",
+          AppConstants.schedule,
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
