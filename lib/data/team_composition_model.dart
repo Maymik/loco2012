@@ -9,6 +9,21 @@ class TeamPlayer {
     required this.name,
     required this.position,
   });
+
+  // factory TeamPlayer.fromJson(Map<String, dynamic> json) {
+  //   return TeamPlayer(
+  //     number: json['number'] as Int,
+  //     name: json['name'] as String,
+  //     position: json['position'] as String,
+  //   );
+  // }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'position': position,
+  //     'name': name,
+  //     'info': info,
+  //   };
+  // }
 }
 
 
