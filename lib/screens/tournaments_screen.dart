@@ -15,7 +15,7 @@ class TournamentsScreen extends StatefulWidget {
 }
 
 class _TournamentsScreenState extends State<TournamentsScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 4;
 
   void _onTabTapped(int index) {
     setState(() {

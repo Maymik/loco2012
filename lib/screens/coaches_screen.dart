@@ -15,7 +15,7 @@ class CoachesScreen extends StatefulWidget {
 }
 
 class _CoachesScreenState extends State<CoachesScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 3;
 
   void _onTabTapped(int index) {
     setState(() {
