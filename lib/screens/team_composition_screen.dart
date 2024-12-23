@@ -15,7 +15,7 @@ class TeamCompositionScreen extends StatefulWidget {
 }
 
 class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 2;
 
 
   void _onTabTapped(int index) {
