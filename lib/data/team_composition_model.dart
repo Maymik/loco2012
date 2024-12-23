@@ -10,42 +10,29 @@ class TeamPlayer {
     required this.position,
   });
 
-  // factory TeamPlayer.fromJson(Map<String, dynamic> json) {
-  //   return TeamPlayer(
-  //     number: json['number'] as Int,
-  //     name: json['name'] as String,
-  //     position: json['position'] as String,
-  //   );
-  // }
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'position': position,
-  //     'name': name,
-  //     'info': info,
-  //   };
-  // }
+
 }
 
 
 final List<TeamPlayer> teamPlayers = [
-  TeamPlayer(number: 1, name: 'John Smith', position: 'Goalkeeper'),
-  TeamPlayer(number: 2, name: 'Alex Johnson', position: 'Defender'),
-  TeamPlayer(number: 3, name: 'Michael Brown', position: 'Defender'),
-  TeamPlayer(number: 4, name: 'Chris Davis', position: 'Midfielder'),
-  TeamPlayer(number: 5, name: 'James Wilson', position: 'Defender'),
-  TeamPlayer(number: 6, name: 'David Garcia', position: 'Midfielder'),
-  TeamPlayer(number: 7, name: 'Daniel Martinez', position: 'Forward'),
-  TeamPlayer(number: 8, name: 'Matthew Rodriguez', position: 'Midfielder'),
-  TeamPlayer(number: 9, name: 'Anthony Hernandez', position: 'Forward'),
-  TeamPlayer(number: 10, name: 'Andrew Moore', position: 'Forward'),
-  TeamPlayer(number: 11, name: 'Joshua Taylor', position: 'Midfielder'),
-  TeamPlayer(number: 12, name: 'Ryan Anderson', position: 'Defender'),
-  TeamPlayer(number: 13, name: 'Jason Thomas', position: 'Defender'),
-  TeamPlayer(number: 14, name: 'Brandon Jackson', position: 'Midfielder'),
-  TeamPlayer(number: 15, name: 'Kevin White', position: 'Defender'),
-  TeamPlayer(number: 16, name: 'Jacob Harris', position: 'Midfielder'),
-  TeamPlayer(number: 17, name: 'Ethan Martin', position: 'Forward'),
-  TeamPlayer(number: 18, name: 'Justin Thompson', position: 'Defender'),
-  TeamPlayer(number: 19, name: 'Aaron Martinez', position: 'Midfielder'),
-  TeamPlayer(number: 20, name: 'Austin Robinson', position: 'Forward'),
+  TeamPlayer( number: 1, name: 'Джон Сміт', position: 'Воротар'),
+  TeamPlayer( number: 2, name: 'Олексій Джонсон', position: 'Захисник'),
+  TeamPlayer( number: 3, name: 'Михайло Браун', position: 'Захисник'),
+  TeamPlayer( number: 4, name: 'Кріс Девіс', position: 'Півзахисник'),
+  TeamPlayer( number: 5, name: 'Джеймс Вілсон', position: 'Захисник'),
+  TeamPlayer( number: 6, name: 'Давид Гарсія', position: 'Півзахисник'),
+  TeamPlayer( number: 7, name: 'Даніель Мартінес', position: 'Нападник'),
+  TeamPlayer( number: 8, name: 'Матвій Родрігес', position: 'Півзахисник'),
+  TeamPlayer( number: 9, name: 'Антоніо Ернандес', position: 'Нападник'),
+  TeamPlayer( number: 10, name: 'Андрій Мур', position: 'Нападник'),
+  TeamPlayer( number: 11, name: 'Йосип Тейлор', position: 'Півзахисник'),
+  TeamPlayer( number: 12, name: 'Райан Андерсон', position: 'Захисник'),
+  TeamPlayer( number: 13, name: 'Джейсон Томас', position: 'Захисник'),
+  TeamPlayer( number: 14, name: 'Брендон Джексон', position: 'Півзахисник'),
+  TeamPlayer( number: 15, name: 'Кевін Вайт', position: 'Захисник'),
+  TeamPlayer( number: 16, name: 'Яків Харріс', position: 'Півзахисник'),
+  TeamPlayer( number: 17, name: 'Етан Мартін', position: 'Нападник'),
+  TeamPlayer( number: 18, name: 'Джастін Томпсон', position: 'Захисник'),
+  TeamPlayer( number: 19, name: 'Аарон Мартінес', position: 'Півзахисник'),
+  TeamPlayer( number: 20, name: 'Остін Робінсон', position: 'Нападник'),
 ];
