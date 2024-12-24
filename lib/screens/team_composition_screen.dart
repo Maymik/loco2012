@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../data/team_composition_model.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 
@@ -15,13 +16,10 @@ class TeamCompositionScreen extends StatefulWidget {
 }
 
 class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
-  int _currentIndex = 2;
+  final int _currentIndex = 2;
 
 
   void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
     context.router.navigate(AppConstants.routes[index]);
   }
   @override
@@ -40,11 +38,26 @@ class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
                 fontSize: 40,
                 fontWeight: FontWeight.w600)),
       ),
-      body: const Center(
-        child: Text(
-          AppConstants.teamComposition,
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
+      body: ListView.builder(
+        itemCount:  teamPlayers .length,
+        itemBuilder: (context, index) {
+          final teamPlayer =  teamPlayers[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: ListTile(
+              leading: const Icon(Icons.person, color: Colors.blue),
+              title: Text(teamPlayer.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Номер: ${teamPlayer.number.toString()}'),
+                 // Text('Ім’я: ${teamPlayer.name}'),
+                  Text('Позиція: ${teamPlayer.position}'),
+                ],
+              ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,

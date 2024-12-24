@@ -19,7 +19,7 @@ final List<TeamPlayer> teamPlayers = [
   TeamPlayer( number: 5, name: 'Джеймс Вілсон', position: 'Захисник'),
   TeamPlayer( number: 6, name: 'Давид Гарсія', position: 'Півзахисник'),
   TeamPlayer( number: 7, name: 'Даніель Мартінес', position: 'Нападник'),
-  TeamPlayer( number: 8, name: 'Матвій Родрігес', position: 'Півзахисник'),
+  TeamPlayer( number: 8, name: 'Марк Козирев', position: 'Півзахисник'),
   TeamPlayer( number: 9, name: 'Антоніо Ернандес', position: 'Нападник'),
   TeamPlayer( number: 10, name: 'Андрій Мур', position: 'Нападник'),
   TeamPlayer( number: 11, name: 'Йосип Тейлор', position: 'Півзахисник'),

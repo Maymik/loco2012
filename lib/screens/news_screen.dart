@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import '../data/news_model.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 
@@ -12,12 +13,9 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
 
   void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
     context.router.navigate(AppConstants.routes[index]);
   }
 
@@ -43,11 +41,22 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ),
       ),
-      body: const Center(
-        child: Text(
-          AppConstants.news,
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
+      body: ListView.builder(
+        itemCount: newsList.length,
+        itemBuilder: (context, index) {
+          final news = newsList[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: ListTile(
+              title: Text(news.news),
+              subtitle: Text("Автор: ${news.author}"),
+              trailing: Text(
+                "${news.time.hour}:${news.time.minute}",
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
