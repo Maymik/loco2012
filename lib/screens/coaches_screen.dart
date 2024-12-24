@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../data/coaches_model.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 
@@ -15,12 +16,9 @@ class CoachesScreen extends StatefulWidget {
 }
 
 class _CoachesScreenState extends State<CoachesScreen> {
-  int _currentIndex = 3;
+  final int _currentIndex = 3;
 
   void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
     context.router.navigate(AppConstants.routes[index]);
   }
   @override
@@ -39,11 +37,25 @@ class _CoachesScreenState extends State<CoachesScreen> {
                 fontSize: 40,
                 fontWeight: FontWeight.w600)),
       ),
-      body: const Center(
-        child: Text(
-          AppConstants.coaches,
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
+      body: ListView.builder(
+        itemCount: coaches.length,
+        itemBuilder: (context, index) {
+          final coach = coaches[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: ListTile(
+              leading: const Icon(Icons.person, color: Colors.blue),
+              title: Text(coach.position, style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Ім’я: ${coach.name}'),
+                  Text('Інформація: ${coach.info}'),
+                ],
+              ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,

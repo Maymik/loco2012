@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../data/tournaments_model.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 
@@ -15,12 +16,9 @@ class TournamentsScreen extends StatefulWidget {
 }
 
 class _TournamentsScreenState extends State<TournamentsScreen> {
-  int _currentIndex = 4;
+  final int _currentIndex = 4;
 
   void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
     context.router.navigate(AppConstants.routes[index]);
   }
 
@@ -40,11 +38,23 @@ class _TournamentsScreenState extends State<TournamentsScreen> {
               color: Colors.green, fontSize: 40, fontWeight: FontWeight.w600),
         ),
       ),
-      body: const Center(
-        child: Text(
-          AppConstants.tournaments,
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
+      body: ListView.builder(
+        itemCount: tournaments.length,
+        itemBuilder: (context, index) {
+          final tournament = tournaments[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: ListTile(
+              leading: const Icon(Icons.sports_soccer, color: Colors.green),
+              title: Text(tournament.name),
+              subtitle: Text(
+                'Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n'
+                    'Місто: ${tournament.city}\n'
+                    'Стадіон: ${tournament.stadium}',
+              ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
