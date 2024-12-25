@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../data/team_composition_model.dart';
 import '../utils/constants.dart';
-import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'TeamCompositionRoute')
 class TeamCompositionScreen extends StatefulWidget {
@@ -16,12 +15,6 @@ class TeamCompositionScreen extends StatefulWidget {
 }
 
 class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
-  final int _currentIndex = 2;
-
-
-  void _onTabTapped(int index) {
-    context.router.navigate(AppConstants.routes[index]);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,29 +32,26 @@ class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
                 fontWeight: FontWeight.w600)),
       ),
       body: ListView.builder(
-        itemCount:  teamPlayers .length,
+        itemCount: teamPlayers.length,
         itemBuilder: (context, index) {
-          final teamPlayer =  teamPlayers[index];
+          final teamPlayer = teamPlayers[index];
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: ListTile(
               leading: const Icon(Icons.person, color: Colors.blue),
-              title: Text(teamPlayer.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(teamPlayer.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Номер: ${teamPlayer.number.toString()}'),
-                 // Text('Ім’я: ${teamPlayer.name}'),
+                  // Text('Ім’я: ${teamPlayer.name}'),
                   Text('Позиція: ${teamPlayer.position}'),
                 ],
               ),
             ),
           );
         },
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
       ),
     );
   }
