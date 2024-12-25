@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../data/schedule_model.dart';
 import '../utils/constants.dart';
-import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'ScheduleRoute')
 class ScheduleScreen extends StatefulWidget {
@@ -16,11 +15,6 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  final int _currentIndex = 1;
-
-  void _onTabTapped(int index) {
-    context.router.navigate(AppConstants.routes[index]);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,14 +40,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: ListTile(
               leading: const Icon(Icons.calendar_today, color: Colors.green),
               title: Text(schedule.day),
-              subtitle: Text('Час: ${schedule.time}\nМісце: ${schedule.location}'),
+              subtitle:
+                  Text('Час: ${schedule.time}\nМісце: ${schedule.location}'),
             ),
           );
         },
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
       ),
     );
   }

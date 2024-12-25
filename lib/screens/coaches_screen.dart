@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../data/coaches_model.dart';
 import '../utils/constants.dart';
-import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'CoachesRoute')
 class CoachesScreen extends StatefulWidget {
@@ -16,11 +15,6 @@ class CoachesScreen extends StatefulWidget {
 }
 
 class _CoachesScreenState extends State<CoachesScreen> {
-  final int _currentIndex = 3;
-
-  void _onTabTapped(int index) {
-    context.router.navigate(AppConstants.routes[index]);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +39,8 @@ class _CoachesScreenState extends State<CoachesScreen> {
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: ListTile(
               leading: const Icon(Icons.person, color: Colors.blue),
-              title: Text(coach.position, style: const TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(coach.position,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -56,10 +51,6 @@ class _CoachesScreenState extends State<CoachesScreen> {
             ),
           );
         },
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
       ),
     );
   }

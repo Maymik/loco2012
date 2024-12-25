@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../data/tournaments_model.dart';
 import '../utils/constants.dart';
-import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'TournamentsRoute')
 class TournamentsScreen extends StatefulWidget {
@@ -16,12 +15,6 @@ class TournamentsScreen extends StatefulWidget {
 }
 
 class _TournamentsScreenState extends State<TournamentsScreen> {
-  final int _currentIndex = 4;
-
-  void _onTabTapped(int index) {
-    context.router.navigate(AppConstants.routes[index]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,16 +42,12 @@ class _TournamentsScreenState extends State<TournamentsScreen> {
               title: Text(tournament.name),
               subtitle: Text(
                 'Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n'
-                    'Місто: ${tournament.city}\n'
-                    'Стадіон: ${tournament.stadium}',
+                'Місто: ${tournament.city}\n'
+                'Стадіон: ${tournament.stadium}',
               ),
             ),
           );
         },
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
       ),
     );
   }

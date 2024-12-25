@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../data/news_model.dart';
 import '../utils/constants.dart';
-import '../widgets/custom_bottom_navigation_bar.dart';
 
 @RoutePage(name: 'NewsRoute')
 class NewsScreen extends StatefulWidget {
@@ -13,12 +12,6 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  final int _currentIndex = 0;
-
-  void _onTabTapped(int index) {
-    context.router.navigate(AppConstants.routes[index]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,10 +50,6 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           );
         },
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
       ),
     );
   }
