@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loco_2012/screens/coaches_screen.dart';
+import 'package:loco_2012/screens/splash_screen.dart';
 import 'package:loco_2012/screens/team_composition_screen.dart';
 import 'package:loco_2012/screens/tournaments_screen.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
@@ -19,6 +20,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
+  bool _isLoading = true;
+
 
   final List<Widget> _screens = [
     const NewsScreen(),
@@ -27,6 +30,19 @@ class _MyAppState extends State<MyApp> {
     const CoachesScreen(),
     const TournamentsScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _simulateLoading();
+  }
+
+  void _simulateLoading() async {
+    await Future.delayed(const Duration(seconds: 5));
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -42,7 +58,10 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Scaffold(
+      home: _isLoading
+          ? const SplashScreen()
+          :
+      Scaffold(
         body: IndexedStack(
           index: _currentIndex,
           children: _screens,
