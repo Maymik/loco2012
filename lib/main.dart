@@ -20,7 +20,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
-  bool _isLoading = true;
+ // bool _isLoading = true;
 
 
   final List<Widget> _screens = [
@@ -34,15 +34,15 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _simulateLoading();
+ //   _simulateLoading();
   }
 
-  void _simulateLoading() async {
-    await Future.delayed(const Duration(seconds: 5));
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  // void _simulateLoading() async {
+  //   await Future.delayed(const Duration(seconds: 5));
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  // }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -58,9 +58,9 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: _isLoading
-          ? const SplashScreen()
-          :
+      home: //_isLoading
+       //   ? const SplashScreen()
+        //  :
       Scaffold(
         body: IndexedStack(
           index: _currentIndex,
