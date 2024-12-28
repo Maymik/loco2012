@@ -1,20 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/screens/schedule_cubit.dart';
 import '../data/schedule_model.dart';
 import '../utils/constants.dart';
 
 @RoutePage(name: 'ScheduleRoute')
-class ScheduleScreen extends StatefulWidget {
+class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({
     super.key,
   });
 
-  @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState();
-}
-
-class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +27,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 fontSize: 40,
                 fontWeight: FontWeight.w600)),
       ),
-      body: ListView.builder(
+      body:
+      BlocBuilder<ScheduleCubit, List<Schedule>>(
+        builder: (context, scheduleList) {
+      if (scheduleList.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return ListView.builder(
         itemCount: scheduleList.length,
         itemBuilder: (context, index) {
           final schedule = scheduleList[index];
@@ -45,7 +47,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ),
           );
         },
-      ),
+      );} ),
     );
   }
 }

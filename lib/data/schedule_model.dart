@@ -12,23 +12,23 @@ class Schedule {
   });
 }
 
-final List<Schedule> scheduleList = [
-  Schedule(
-    day: 'Понеділок',
-    time: '16:30',
-    location: 'Стадіон Локомотив',
-    id: '1',
-  ),
-  Schedule(
-    day: 'Середа',
-    time: '16:30',
-    location: 'Стадіон Локомотив',
-    id: '2',
-  ),
-  Schedule(
-    day: 'П’ятниця',
-    time: '16:30',
-    location: 'Стадіон Локомотив',
-    id: '3',
-  ),
-];
+// final List<Schedule> scheduleList = [
+//   Schedule(
+//     day: 'Понеділок',
+//     time: '16:30',
+//     location: 'Стадіон Локомотив',
+//     id: '1',
+//   ),
+//   Schedule(
+//     day: 'Середа',
+//     time: '16:30',
+//     location: 'Стадіон Локомотив',
+//     id: '2',
+//   ),
+//   Schedule(
+//     day: 'П’ятниця',
+//     time: '16:30',
+//     location: 'Стадіон Локомотив',
+//     id: '3',
+//   ),
+// ];
