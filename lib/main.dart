@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/screens/coaches_cubit.dart';
 import 'package:loco_2012/screens/coaches_screen.dart';
+import 'package:loco_2012/screens/news_cubit.dart';
+import 'package:loco_2012/screens/schedule_cubit.dart';
+import 'package:loco_2012/screens/team_composition_cubit.dart';
 import 'package:loco_2012/screens/team_composition_screen.dart';
+import 'package:loco_2012/screens/tournaments_cubit.dart';
 import 'package:loco_2012/screens/tournaments_screen.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
 import 'screens/news_screen.dart';
@@ -36,20 +42,29 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Loko2012',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => TournamentsCubit()..loadTournaments()),
+        BlocProvider(create: (_) => NewsCubit()..loadNews()),
+        BlocProvider(create: (_) => CoachesCubit()..loadCoaches()),
+        BlocProvider(create: (_) => TeamCompositionCubit()..loadTeamComposition()),
+        BlocProvider(create: (_) => ScheduleCubit()..loadSchedule()),
+      ],
+      child: MaterialApp(
+        title: 'Loko2012',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTabTapped: _onTabTapped,
+        home: Scaffold(
+          body: IndexedStack(
+            index: _currentIndex,
+            children: _screens,
+          ),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTabTapped: _onTabTapped,
+          ),
         ),
       ),
     );

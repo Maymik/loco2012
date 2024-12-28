@@ -1,20 +1,14 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/screens/tournaments_cubit.dart';
 import '../data/tournaments_model.dart';
 import '../utils/constants.dart';
 
 @RoutePage(name: 'TournamentsRoute')
-class TournamentsScreen extends StatefulWidget {
-  const TournamentsScreen({
-    super.key,
-  });
+class TournamentsScreen extends StatelessWidget {
+  const TournamentsScreen({super.key});
 
-  @override
-  State<TournamentsScreen> createState() => _TournamentsScreenState();
-}
-
-class _TournamentsScreenState extends State<TournamentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,28 +18,41 @@ class _TournamentsScreenState extends State<TournamentsScreen> {
         centerTitle: true,
         backgroundColor: Colors.red,
         titleTextStyle: const TextStyle(
-            color: Colors.green, fontSize: 40, fontWeight: FontWeight.w600),
+          color: Colors.green,
+          fontSize: 40,
+          fontWeight: FontWeight.w600,
+        ),
         title: const Text(
           AppConstants.tournaments,
           style: TextStyle(
-              color: Colors.green, fontSize: 40, fontWeight: FontWeight.w600),
+            color: Colors.green,
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: tournaments.length,
-        itemBuilder: (context, index) {
-          final tournament = tournaments[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ListTile(
-              leading: const Icon(Icons.sports_soccer, color: Colors.green),
-              title: Text(tournament.name),
-              subtitle: Text(
-                'Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n'
-                'Місто: ${tournament.city}\n'
-                'Стадіон: ${tournament.stadium}',
-              ),
-            ),
+      body: BlocBuilder<TournamentsCubit, List<Tournament>>(
+        builder: (context, tournaments) {
+          if (tournaments.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return ListView.builder(
+            itemCount: tournaments.length,
+            itemBuilder: (context, index) {
+              final tournament = tournaments[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: ListTile(
+                  leading: const Icon(Icons.sports_soccer, color: Colors.green),
+                  title: Text(tournament.name),
+                  subtitle: Text(
+                    'Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n'
+                    'Место: ${tournament.city}\n'
+                    'Стадион: ${tournament.stadium}',
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
