@@ -1,20 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/screens/team_composition_cubit.dart';
 import '../data/team_composition_model.dart';
 import '../utils/constants.dart';
 
 @RoutePage(name: 'TeamCompositionRoute')
-class TeamCompositionScreen extends StatefulWidget {
+class TeamCompositionScreen extends StatelessWidget {
   const TeamCompositionScreen({
     super.key,
   });
 
-  @override
-  State<TeamCompositionScreen> createState() => _TeamCompositionScreenState();
-}
-
-class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +27,13 @@ class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
                 fontSize: 40,
                 fontWeight: FontWeight.w600)),
       ),
-      body: ListView.builder(
+      body:
+      BlocBuilder<TeamCompositionCubit, List<TeamPlayer>>(
+        builder: (context, teamPlayers) {
+      if (teamPlayers.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return ListView.builder(
         itemCount: teamPlayers.length,
         itemBuilder: (context, index) {
           final teamPlayer = teamPlayers[index];
@@ -52,7 +54,7 @@ class _TeamCompositionScreenState extends State<TeamCompositionScreen> {
             ),
           );
         },
-      ),
+      );} ),
     );
   }
 }
