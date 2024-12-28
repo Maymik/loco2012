@@ -1,20 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/coaches_model.dart';
 import '../utils/constants.dart';
+import 'coaches_cubit.dart';
 
 @RoutePage(name: 'CoachesRoute')
-class CoachesScreen extends StatefulWidget {
+class CoachesScreen extends StatelessWidget {
   const CoachesScreen({
     super.key,
   });
 
-  @override
-  State<CoachesScreen> createState() => _CoachesScreenState();
-}
-
-class _CoachesScreenState extends State<CoachesScreen> {
+//   @override
+//   State<CoachesScreen> createState() => _CoachesScreenState();
+// }
+//
+// class _CoachesScreenState extends State<CoachesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,13 @@ class _CoachesScreenState extends State<CoachesScreen> {
                 fontSize: 40,
                 fontWeight: FontWeight.w600)),
       ),
-      body: ListView.builder(
+      body:
+      BlocBuilder<CoachesCubit, List<Coach>>(
+        builder: (context, coaches) {
+      if (coaches.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return ListView.builder(
         itemCount: coaches.length,
         itemBuilder: (context, index) {
           final coach = coaches[index];
@@ -51,7 +59,7 @@ class _CoachesScreenState extends State<CoachesScreen> {
             ),
           );
         },
-      ),
+      );} ),
     );
   }
 }

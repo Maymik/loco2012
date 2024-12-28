@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/screens/coaches_cubit.dart';
 import 'package:loco_2012/screens/coaches_screen.dart';
 import 'package:loco_2012/screens/news_cubit.dart';
 import 'package:loco_2012/screens/team_composition_screen.dart';
@@ -43,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (_) => TournamentsCubit()..loadTournaments()),
         BlocProvider(create: (_) => NewsCubit()..loadNews()),
-
+        BlocProvider(create: (_) => CoachesCubit()..loadCoaches()),
       ],
       child: MaterialApp(
         title: 'Loko2012',
