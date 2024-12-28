@@ -27,34 +27,34 @@ class TeamCompositionScreen extends StatelessWidget {
                 fontSize: 40,
                 fontWeight: FontWeight.w600)),
       ),
-      body:
-      BlocBuilder<TeamCompositionCubit, List<TeamPlayer>>(
-        builder: (context, teamPlayers) {
-      if (teamPlayers.isEmpty) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return ListView.builder(
-        itemCount: teamPlayers.length,
-        itemBuilder: (context, index) {
-          final teamPlayer = teamPlayers[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ListTile(
-              leading: const Icon(Icons.person, color: Colors.blue),
-              title: Text(teamPlayer.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Номер: ${teamPlayer.number.toString()}'),
-                  // Text('Ім’я: ${teamPlayer.name}'),
-                  Text('Позиція: ${teamPlayer.position}'),
-                ],
+      body: BlocBuilder<TeamCompositionCubit, List<TeamPlayer>>(
+          builder: (context, teamPlayers) {
+        if (teamPlayers.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return ListView.builder(
+          itemCount: teamPlayers.length,
+          itemBuilder: (context, index) {
+            final teamPlayer = teamPlayers[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: ListTile(
+                leading: const Icon(Icons.person, color: Colors.blue),
+                title: Text(teamPlayer.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Номер: ${teamPlayer.number.toString()}'),
+                    // Text('Ім’я: ${teamPlayer.name}'),
+                    Text('Позиція: ${teamPlayer.position}'),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      );} ),
+            );
+          },
+        );
+      }),
     );
   }
 }

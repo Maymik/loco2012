@@ -9,11 +9,6 @@ import 'news_cubit.dart';
 class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key});
 
-//   @override
-//   State<NewsScreen> createState() => _NewsScreenState();
-// }
-//
-// class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,29 +31,29 @@ class NewsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocBuilder<NewsCubit, List<NewsModel>>(
-        builder: (context, newsList) {
-      if (newsList.isEmpty) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return
-      ListView.builder(
-        itemCount: newsList.length,
-        itemBuilder: (context, index) {
-          final news = newsList[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ListTile(
-              title: Text(news.news),
-              subtitle: Text("Автор: ${news.author}"),
-              trailing: Text(
-                "${news.time.hour}:${news.time.minute}",
-                style: const TextStyle(color: Colors.grey),
+      body:
+          BlocBuilder<NewsCubit, List<NewsModel>>(builder: (context, newsList) {
+        if (newsList.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return ListView.builder(
+          itemCount: newsList.length,
+          itemBuilder: (context, index) {
+            final news = newsList[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: ListTile(
+                title: Text(news.news),
+                subtitle: Text("Автор: ${news.author}"),
+                trailing: Text(
+                  "${news.time.hour}:${news.time.minute}",
+                  style: const TextStyle(color: Colors.grey),
+                ),
               ),
-            ),
-          );
-        },
-      );} ),
+            );
+          },
+        );
+      }),
     );
   }
 }
