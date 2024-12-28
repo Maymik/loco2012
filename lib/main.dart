@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/screens/coaches_screen.dart';
+import 'package:loco_2012/screens/news_cubit.dart';
 import 'package:loco_2012/screens/team_composition_screen.dart';
 import 'package:loco_2012/screens/tournaments_cubit.dart';
 import 'package:loco_2012/screens/tournaments_screen.dart';
@@ -27,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     const ScheduleScreen(),
     const TeamCompositionScreen(),
     const CoachesScreen(),
-    TournamentsScreen(),
+    const TournamentsScreen(),
   ];
 
   void _onTabTapped(int index) {
@@ -41,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => TournamentsCubit()..loadTournaments()),
-        //BlocProvider(create: (_) => UserInfoCubit()..loadUserInfo()),
+        BlocProvider(create: (_) => NewsCubit()..loadNews()),
 
       ],
       child: MaterialApp(

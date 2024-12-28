@@ -1,17 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../data/news_model.dart';
 import '../utils/constants.dart';
+import 'news_cubit.dart';
 
 @RoutePage(name: 'NewsRoute')
-class NewsScreen extends StatefulWidget {
+class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key});
 
-  @override
-  State<NewsScreen> createState() => _NewsScreenState();
-}
-
-class _NewsScreenState extends State<NewsScreen> {
+//   @override
+//   State<NewsScreen> createState() => _NewsScreenState();
+// }
+//
+// class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,13 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
+      body: BlocBuilder<NewsCubit, List<NewsModel>>(
+        builder: (context, newsList) {
+      if (newsList.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return
+      ListView.builder(
         itemCount: newsList.length,
         itemBuilder: (context, index) {
           final news = newsList[index];
@@ -50,7 +58,7 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           );
         },
-      ),
+      );} ),
     );
   }
 }
