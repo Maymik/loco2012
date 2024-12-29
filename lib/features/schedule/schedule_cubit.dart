@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/schedule_model.dart';
+import '../../data/schedule_model.dart';
 
 class ScheduleCubit extends Cubit<List<Schedule>> {
   ScheduleCubit() : super([]);

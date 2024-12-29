@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/news_model.dart';
+import '../../data/news_model.dart';
 
 class NewsCubit extends Cubit<List<NewsModel>> {
   NewsCubit() : super([]);

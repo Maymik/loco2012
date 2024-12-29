@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loco_2012/screens/coaches_cubit.dart';
-import 'package:loco_2012/screens/coaches_screen.dart';
-import 'package:loco_2012/screens/news_cubit.dart';
-import 'package:loco_2012/screens/schedule_cubit.dart';
-import 'package:loco_2012/screens/team_composition_cubit.dart';
-import 'package:loco_2012/screens/team_composition_screen.dart';
-import 'package:loco_2012/screens/tournaments_cubit.dart';
-import 'package:loco_2012/screens/tournaments_screen.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
-import 'screens/news_screen.dart';
-import 'screens/schedule_screen.dart';
+import 'features/coaches/coaches_cubit.dart';
+import 'features/coaches/coaches_screen.dart';
+import 'features/news/news_cubit.dart';
+import 'features/news/news_screen.dart';
+import 'features/schedule/schedule_cubit.dart';
+import 'features/schedule/schedule_screen.dart';
+import 'features/team_composition/team_composition_cubit.dart';
+import 'features/team_composition/team_composition_screen.dart';
+import 'features/tournaments/tournaments_cubit.dart';
+import 'features/tournaments/tournaments_screen.dart';
+
 
 void main() {
   runApp(const MyApp());

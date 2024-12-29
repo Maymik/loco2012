@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/coaches_model.dart';
+import '../../data/coaches_model.dart';
 
 class CoachesCubit extends Cubit<List<Coach>> {
   CoachesCubit() : super([]);
