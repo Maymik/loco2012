@@ -2,7 +2,8 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/features/tournaments/tournaments_cubit.dart';
-import '../../data/tournaments_model.dart';
+import 'package:loco_2012/features/tournaments/tournaments_state.dart';
+
 import '../../utils/constants.dart';
 
 @RoutePage(name: 'TournamentsRoute')
@@ -31,28 +32,33 @@ class TournamentsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocBuilder<TournamentsCubit, List<Tournament>>(
-        builder: (context, tournaments) {
-          if (tournaments.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return ListView.builder(
-            itemCount: tournaments.length,
-            itemBuilder: (context, index) {
-              final tournament = tournaments[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ListTile(
-                  leading: const Icon(Icons.sports_soccer, color: Colors.green),
-                  title: Text(tournament.name),
-                  subtitle: Text(
-                    'Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n'
-                    'Место: ${tournament.city}\n'
-                    'Стадион: ${tournament.stadium}',
+      body: BlocBuilder<TournamentsCubit, TournamentsState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () => const Center(
+              child: Text(''),
+            ),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: (tournaments) => ListView.builder(
+              itemCount: tournaments.length,
+              itemBuilder: (context, index) {
+                final tournament = tournaments[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ListTile(
+                    leading:
+                    const Icon(Icons.sports_soccer, color: Colors.green),
+                    title: Text(tournament.name),
+                    subtitle: Text(
+                      'Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n'
+                          'Место: ${tournament.city}\n'
+                          'Стадіон: ${tournament.stadium}',
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
+            error: (message) => Center(child: Text(message)),
           );
         },
       ),
