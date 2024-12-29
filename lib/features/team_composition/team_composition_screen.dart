@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loco_2012/screens/team_composition_cubit.dart';
-import '../data/team_composition_model.dart';
-import '../utils/constants.dart';
+import 'package:loco_2012/features/team_composition/team_composition_cubit.dart';
+import '../../data/team_composition_model.dart';
+import '../../utils/constants.dart';
 
 @RoutePage(name: 'TeamCompositionRoute')
 class TeamCompositionScreen extends StatelessWidget {

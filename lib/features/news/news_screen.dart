@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/news_model.dart';
-import '../utils/constants.dart';
+import '../../data/news_model.dart';
+import '../../utils/constants.dart';
 import 'news_cubit.dart';
 
 @RoutePage(name: 'NewsRoute')

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/tournaments_model.dart';
+import '../../data/tournaments_model.dart';
 
 class TournamentsCubit extends Cubit<List<Tournament>> {
   TournamentsCubit() : super([]);

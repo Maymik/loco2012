@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/team_composition_model.dart';
+import '../../data/team_composition_model.dart';
 
 class TeamCompositionCubit extends Cubit<List<TeamPlayer>> {
   TeamCompositionCubit() : super([]);
