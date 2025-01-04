@@ -1,5 +1,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/launch_background_color" />
+    <foreground>
+        <inset
+            android:drawable="@drawable/ic_launcher_foreground"
+            android:inset="16.9%" />
+    </foreground>
     <item>
         <bitmap
             android:gravity="center"
