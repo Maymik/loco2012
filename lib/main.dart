@@ -12,7 +12,6 @@ import 'features/team_composition/team_composition_screen.dart';
 import 'features/tournaments/tournaments_cubit.dart';
 import 'features/tournaments/tournaments_screen.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -26,19 +25,29 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
+  PageController? _pageController;
 
-  final List<Widget> _screens = [
-    const NewsScreen(),
-    const ScheduleScreen(),
-    const TeamCompositionScreen(),
-    const CoachesScreen(),
-    const TournamentsScreen(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
+  }
 
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
+    _pageController?.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -48,7 +57,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => TournamentsCubit()..loadTournaments()),
         BlocProvider(create: (_) => NewsCubit()..loadNews()),
         BlocProvider(create: (_) => CoachesCubit()..loadCoaches()),
-        BlocProvider(create: (_) => TeamCompositionCubit()..loadTeamComposition()),
+        BlocProvider(
+            create: (_) => TeamCompositionCubit()..loadTeamComposition()),
         BlocProvider(create: (_) => ScheduleCubit()..loadSchedule()),
       ],
       child: MaterialApp(
@@ -58,10 +68,23 @@ class _MyAppState extends State<MyApp> {
           useMaterial3: true,
         ),
         home: Scaffold(
-          body: IndexedStack(
-            index: _currentIndex,
-            children: _screens,
-          ),
+          body: _pageController == null
+              ? const Center(child: CircularProgressIndicator())
+              : PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                  children: const [
+                    NewsScreen(),
+                    ScheduleScreen(),
+                    TeamCompositionScreen(),
+                    CoachesScreen(),
+                    TournamentsScreen(),
+                  ],
+                ),
           bottomNavigationBar: CustomBottomNavigationBar(
             currentIndex: _currentIndex,
             onTabTapped: _onTabTapped,
