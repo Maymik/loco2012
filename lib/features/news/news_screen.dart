@@ -41,6 +41,7 @@ class NewsScreen extends StatelessWidget {
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ListTile(
+                    leading: const Icon(Icons.newspaper_rounded, color: Colors.green),
                     title: Text(news.news),
                     subtitle: Text("Автор: ${news.author}"),
                     trailing: Text(
