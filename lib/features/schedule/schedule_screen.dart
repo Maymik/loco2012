@@ -1,12 +1,10 @@
-import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/features/schedule/schedule_cubit.dart';
 import 'package:loco_2012/features/schedule/schedule_state.dart';
-
 import '../../utils/constants.dart';
+import '../../widgets/custom_expandable_card.dart';
 
-@RoutePage(name: 'ScheduleRoute')
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
 
@@ -30,22 +28,16 @@ class ScheduleScreen extends StatelessWidget {
       body: BlocBuilder<ScheduleCubit, ScheduleState>(
         builder: (context, state) {
           return state.when(
-            initial: () => const Center(
-              child: Text(''),
-            ),
+            initial: () => const Center(child: Text('')),
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (scheduleList) => ListView.builder(
               itemCount: scheduleList.length,
               itemBuilder: (context, index) {
                 final schedule = scheduleList[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    leading: const Icon(Icons.calendar_today, color: Colors.green),
-                    title: Text(schedule.day),
-                    subtitle: Text(
-                        'Час: ${schedule.time}\nМісце: ${schedule.location}'),
-                  ),
+                return ExpandableCard(
+                  title: schedule.day,
+                  subtitle: "Час: ${schedule.time}\nМісце: ${schedule.location}",
+                  leadingIcon: const Icon(Icons.calendar_today, color: Colors.green),
                 );
               },
             ),

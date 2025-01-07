@@ -1,12 +1,10 @@
-import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../utils/constants.dart';
+import '../../widgets/custom_expandable_card.dart';
 import 'coaches_cubit.dart';
 import 'coaches_state.dart';
 
-@RoutePage(name: 'CoachesRoute')
 class CoachesScreen extends StatelessWidget {
   const CoachesScreen({super.key});
 
@@ -21,7 +19,10 @@ class CoachesScreen extends StatelessWidget {
         title: const Text(
           AppConstants.coaches,
           style: TextStyle(
-              color: Colors.green, fontSize: 40, fontWeight: FontWeight.w600),
+            color: Colors.green,
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: BlocBuilder<CoachesCubit, CoachesState>(
@@ -33,22 +34,10 @@ class CoachesScreen extends StatelessWidget {
               itemCount: coaches.length,
               itemBuilder: (context, index) {
                 final coach = coaches[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    leading: const Icon(Icons.person, color: Colors.blue),
-                    title: Text(
-                      coach.position,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Ім’я: ${coach.name}'),
-                        Text('Інформація: ${coach.info}'),
-                      ],
-                    ),
-                  ),
+                return ExpandableCard(
+                  title: "${coach.position} - ${coach.name}",
+                  subtitle: coach.info,
+                  leadingIcon: const Icon(Icons.person, color: Colors.blue),
                 );
               },
             ),
