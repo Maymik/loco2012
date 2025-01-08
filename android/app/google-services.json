@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:15753221037:android:e78792db1353d4ce344724",
+        "android_client_info": {
+          "package_name": "com.example.loco2012"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeqox_e5JfGIXrrQATkZp3hheFm7nlv80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:15753221037:android:38451aca46bf8542344724",
         "android_client_info": {
           "package_name": "com.yourcompany.loco2012"
