@@ -36,8 +36,10 @@ class ScheduleScreen extends StatelessWidget {
                 final schedule = scheduleList[index];
                 return ExpandableCard(
                   title: schedule.day,
-                  subtitle: "Час: ${schedule.time}\nМісце: ${schedule.location}",
-                  leadingIcon: const Icon(Icons.calendar_today, color: Colors.green),
+                  subtitle:
+                      "Час: ${schedule.time}\nМісце: ${schedule.location}",
+                  leadingIcon:
+                      const Icon(Icons.calendar_today, color: Colors.green),
                 );
               },
             ),

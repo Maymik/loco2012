@@ -37,8 +37,9 @@ class NewsScreen extends StatelessWidget {
                 return ExpandableCard(
                   title: news.news.split('.').first,
                   subtitle:
-                  "${news.news}\n\nАвтор: ${news.author}\n${news.time.hour}:${news.time.minute}",
-                  leadingIcon: const Icon(Icons.newspaper_rounded, color: Colors.green),
+                      "${news.news}\n\nАвтор: ${news.author}\n${news.time.hour}:${news.time.minute}",
+                  leadingIcon:
+                      const Icon(Icons.newspaper_rounded, color: Colors.green),
                 );
               },
             ),

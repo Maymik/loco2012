@@ -10,25 +10,21 @@ class Schedule {
     required this.location,
     required this.id,
   });
-}
 
-// final List<Schedule> scheduleList = [
-//   Schedule(
-//     day: 'Понеділок',
-//     time: '16:30',
-//     location: 'Стадіон Локомотив',
-//     id: '1',
-//   ),
-//   Schedule(
-//     day: 'Середа',
-//     time: '16:30',
-//     location: 'Стадіон Локомотив',
-//     id: '2',
-//   ),
-//   Schedule(
-//     day: 'П’ятниця',
-//     time: '16:30',
-//     location: 'Стадіон Локомотив',
-//     id: '3',
-//   ),
-// ];
+  factory Schedule.fromJson(Map<String, dynamic> json, String id) {
+    return Schedule(
+      day: json['day'] as String,
+      time: json['time'] as String,
+      location: json['location'] as String,
+      id: id,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'day': day,
+      'time': time,
+      'location': location,
+    };
+  }
+}

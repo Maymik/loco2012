@@ -37,10 +37,11 @@ class TournamentsScreen extends StatelessWidget {
                 return ExpandableCard(
                   title: tournament.name,
                   subtitle:
-                  "Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n"
+                      "Дата: ${tournament.date.day}.${tournament.date.month}.${tournament.date.year}\n"
                       "Місце: ${tournament.city}\n"
                       "Стадіон: ${tournament.stadium}",
-                  leadingIcon: const Icon(Icons.sports_soccer, color: Colors.green),
+                  leadingIcon:
+                      const Icon(Icons.sports_soccer, color: Colors.green),
                 );
               },
             ),
