@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
@@ -11,8 +12,14 @@ import 'features/team_composition/team_composition_cubit.dart';
 import 'features/team_composition/team_composition_screen.dart';
 import 'features/tournaments/tournaments_cubit.dart';
 import 'features/tournaments/tournaments_screen.dart';
+import 'firebase_options.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
