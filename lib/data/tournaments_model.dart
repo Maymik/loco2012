@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Tournament {
   final DateTime date;
   final String name;
@@ -12,28 +14,23 @@ class Tournament {
     required this.stadium,
     required this.id,
   });
-}
 
-// final List<Tournament> tournaments = [
-//   Tournament(
-//     date: DateTime(2024, 1, 15),
-//     name: 'Зимовий Кубок Лева',
-//     city: 'Львів',
-//     stadium: 'Стадіон Україна',
-//     id: '1',
-//   ),
-//   Tournament(
-//     date: DateTime(2024, 3, 20),
-//     name: 'Весняний Турнір Поділля',
-//     city: 'Вінниця',
-//     stadium: 'Центральний міський стадіон',
-//     id: '2',
-//   ),
-//   Tournament(
-//     date: DateTime(2024, 6, 10),
-//     name: 'Літній Чемпіонат Столиці',
-//     city: 'Київ',
-//     stadium: 'Стадіон Локомотив',
-//     id: '3',
-//   ),
-// ];
+  factory Tournament.fromJson(Map<String, dynamic> json, String documentId) {
+    return Tournament(
+      date: (json['date'] as Timestamp).toDate(),
+      name: json['name'] ?? 'Невідомий турнір',
+      city: json['city'] ?? 'Невідомо',
+      stadium: json['stadium'] ?? 'Невідомий стадіон',
+      id: documentId,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'name': name,
+      'city': city,
+      'stadium': stadium,
+    };
+  }
+}
