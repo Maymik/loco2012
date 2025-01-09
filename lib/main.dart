@@ -61,12 +61,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => TournamentsCubit()..loadTournaments()),
-        BlocProvider(create: (_) => NewsCubit()..loadNews()),
-        BlocProvider(create: (_) => CoachesCubit()..loadCoaches()),
+        BlocProvider(create: (_) => TournamentsCubit()..subscribeToTournaments()),
+        BlocProvider(create: (_) => NewsCubit()..subscribeToNews()),
+        BlocProvider(create: (_) => CoachesCubit()..subscribeCoaches()),
         BlocProvider(
-            create: (_) => TeamCompositionCubit()..loadTeamComposition()),
-        BlocProvider(create: (_) => ScheduleCubit()..loadSchedule()),
+            create: (_) => TeamCompositionCubit()..subscribeTeamComposition()),
+        BlocProvider(create: (_) => ScheduleCubit()..subscribeToSchedule()),
       ],
       child: MaterialApp(
         title: 'Loko2012',

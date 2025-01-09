@@ -4,32 +4,28 @@ import '../../data/news_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NewsCubit extends Cubit<NewsState> {
-  NewsCubit() : super(const NewsState.initial());
+  NewsCubit() : super(const NewsState.initial()) {
+    subscribeToNews();
+  }
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void loadNews() async {
+  void subscribeToNews() {
     emit(const NewsState.loading());
 
-    try {
-      final querySnapshot = await _firestore
-          .collection('news')
-          .orderBy('time', descending: true)
-          .get();
-
+    _firestore
+        .collection('news')
+        .orderBy('time', descending: true)
+        .snapshots()
+        .listen((querySnapshot) {
       final newsList = querySnapshot.docs.map((doc) {
         final data = doc.data();
-        return NewsModel(
-          time: (data['time'] as Timestamp).toDate(),
-          news: data['news'] as String,
-          author: data['author'] as String,
-          id: doc.id,
-        );
+        return NewsModel.fromJson(data, doc.id);
       }).toList();
 
       emit(NewsState.loaded(newsList));
-    } catch (e) {
-      emit(NewsState.error('Ошибка загрузки: ${e.toString()}'));
-    }
+    }, onError: (e) {
+      emit(NewsState.error('Помилка завантаження: ${e.toString()}'));
+    });
   }
 }

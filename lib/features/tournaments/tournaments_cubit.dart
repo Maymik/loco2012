@@ -6,20 +6,24 @@ import 'tournaments_state.dart';
 class TournamentsCubit extends Cubit<TournamentsState> {
   TournamentsCubit() : super(const TournamentsState.initial());
 
-  void loadTournaments() async {
+  void subscribeToTournaments() {
     emit(const TournamentsState.loading());
 
-    try {
-      final querySnapshot =
-          await FirebaseFirestore.instance.collection('tournament').get();
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-      final tournaments = querySnapshot.docs.map((doc) {
-        return Tournament.fromJson(doc.data(), doc.id);
+    _firestore
+        .collection('tournament')
+        .orderBy('date', descending: true)
+        .snapshots()
+        .listen((querySnapshot) {
+      final newsList = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        return Tournament.fromJson(data, doc.id);
       }).toList();
 
-      emit(TournamentsState.loaded(tournaments));
-    } catch (e) {
-      emit(const TournamentsState.error('Не вдалося завантажити турніри'));
-    }
+      emit(TournamentsState.loaded(newsList));
+    }, onError: (e) {
+      emit(TournamentsState.error('Помилка завантаження: ${e.toString()}'));
+    });
   }
 }

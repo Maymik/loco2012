@@ -6,21 +6,24 @@ import 'team_composition_state.dart';
 class TeamCompositionCubit extends Cubit<TeamCompositionState> {
   TeamCompositionCubit() : super(const TeamCompositionState.initial());
 
-  void loadTeamComposition() async {
+  void subscribeTeamComposition() async {
     emit(const TeamCompositionState.loading());
 
-    try {
-      final querySnapshot =
-          await FirebaseFirestore.instance.collection('team_player').get();
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-      final teamPlayers = querySnapshot.docs.map((doc) {
-        return TeamPlayer.fromJson(doc.data(), doc.id);
+    _firestore
+        .collection('team_player')
+        .orderBy('number', descending: false)
+        .snapshots()
+        .listen((querySnapshot) {
+      final newsList = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        return TeamPlayer.fromJson(data, doc.id);
       }).toList();
 
-      emit(TeamCompositionState.loaded(teamPlayers));
-    } catch (e) {
-      emit(const TeamCompositionState.error(
-          'Не вдалося завантажити склад команди'));
-    }
+      emit(TeamCompositionState.loaded(newsList));
+    }, onError: (e) {
+      emit(TeamCompositionState.error('Помилка завантаження: ${e.toString()}'));
+    });
   }
 }
