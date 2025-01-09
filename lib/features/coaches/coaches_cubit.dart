@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/coaches_model.dart';
+import '../../utils/service_locator.dart';
 import 'coaches_state.dart';
 
 class CoachesCubit extends Cubit<CoachesState> {
+  final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
+
   CoachesCubit() : super(const CoachesState.initial());
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void subscribeCoaches() async {
     emit(const CoachesState.loading());

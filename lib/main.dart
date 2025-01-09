@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/utils/service_locator.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
 import 'features/coaches/coaches_cubit.dart';
 import 'features/coaches/coaches_screen.dart';
@@ -20,6 +21,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setupLocator();
   runApp(const MyApp());
 }
 

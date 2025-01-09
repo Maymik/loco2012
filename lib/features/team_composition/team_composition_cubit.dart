@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/team_composition_model.dart';
+import '../../utils/service_locator.dart';
 import 'team_composition_state.dart';
 
 class TeamCompositionCubit extends Cubit<TeamCompositionState> {
+  final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
+
   TeamCompositionCubit() : super(const TeamCompositionState.initial());
 
   void subscribeTeamComposition() async {
     emit(const TeamCompositionState.loading());
 
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     _firestore
         .collection('team_player')
