@@ -8,21 +8,22 @@ class ScheduleCubit extends Cubit<ScheduleState> {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void loadSchedule() async {
+  void subscribeToSchedule() {
     emit(const ScheduleState.loading());
 
-    try {
-      final querySnapshot =
-          await _firestore.collection('schedule').orderBy('day').get();
-
+    _firestore
+        .collection('schedule')
+        .orderBy('id', descending: false)
+        .snapshots()
+        .listen((querySnapshot) {
       final scheduleList = querySnapshot.docs.map((doc) {
         final data = doc.data();
         return Schedule.fromJson(data, doc.id);
       }).toList();
 
       emit(ScheduleState.loaded(scheduleList));
-    } catch (e) {
+    }, onError: (e) {
       emit(ScheduleState.error('Помилка завантаження: ${e.toString()}'));
-    }
+    });
   }
 }
