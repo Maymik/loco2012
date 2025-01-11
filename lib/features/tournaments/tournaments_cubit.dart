@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/tournaments_model.dart';
+import '../../utils/service_locator.dart';
 import 'tournaments_state.dart';
 
 class TournamentsCubit extends Cubit<TournamentsState> {
+  final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
+
   TournamentsCubit() : super(const TournamentsState.initial());
 
   void subscribeToTournaments() {
     emit(const TournamentsState.loading());
 
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     _firestore
         .collection('tournament')

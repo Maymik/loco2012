@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../utils/service_locator.dart';
 import 'schedule_state.dart';
 import '../../data/schedule_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScheduleCubit extends Cubit<ScheduleState> {
+  final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
+
+
   ScheduleCubit() : super(const ScheduleState.initial());
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void subscribeToSchedule() {
     emit(const ScheduleState.loading());
