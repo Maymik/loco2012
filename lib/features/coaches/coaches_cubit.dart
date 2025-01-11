@@ -15,7 +15,7 @@ class CoachesCubit extends Cubit<CoachesState> {
 
     _firestore
         .collection('coach')
-        .orderBy('id', descending: false)
+        .orderBy('rank', descending: false)
         .snapshots()
         .listen((querySnapshot) {
       final newsList = querySnapshot.docs.map((doc) {

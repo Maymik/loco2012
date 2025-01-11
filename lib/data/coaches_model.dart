@@ -2,12 +2,14 @@ class Coach {
   final String position;
   final String name;
   final String info;
+  final String rank;
   final String id;
 
   Coach({
     required this.position,
     required this.name,
     required this.info,
+    required this.rank,
     required this.id,
   });
 
@@ -16,6 +18,7 @@ class Coach {
       position: json['position'] ?? 'Невідомо',
       name: json['name'] ?? 'Невідомо',
       info: json['info'] ?? 'Немає інформації',
+      rank: json['rank'] ?? 'Невідомо',
       id: documentId,
     );
   }
@@ -25,6 +28,7 @@ class Coach {
       'position': position,
       'name': name,
       'info': info,
+      'rank': rank,
     };
   }
 }
