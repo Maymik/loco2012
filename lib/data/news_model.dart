@@ -5,12 +5,14 @@ class NewsModel {
   final String news;
   final String author;
   final String id;
+  final List<String> images;
 
   NewsModel({
     required this.time,
     required this.news,
     required this.author,
     required this.id,
+    required this.images,
   });
 
   factory NewsModel.fromJson(Map<String, dynamic> json, String id) {
@@ -19,6 +21,8 @@ class NewsModel {
       news: json['news'] as String,
       author: json['author'] as String,
       id: id,
+      images: (json['images'] as List<dynamic>?)?.map((e) => e as String)
+          .toList() ?? [],
     );
   }
 
@@ -27,6 +31,7 @@ class NewsModel {
       'time': Timestamp.fromDate(time),
       'news': news,
       'author': author,
+      'images': images,
     };
   }
 }
