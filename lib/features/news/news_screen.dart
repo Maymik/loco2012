@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../utils/constants.dart';
-import '../../widgets/custom_expandable_card.dart';
 import 'news_cubit.dart';
 import 'news_state.dart';
 
@@ -34,13 +33,23 @@ class NewsScreen extends StatelessWidget {
               itemCount: newsList.length,
               itemBuilder: (context, index) {
                 final news = newsList[index];
-                return ExpandableCard(
-                  title: news.news.split('.').first,
-                  subtitle:
-                      "${news.news}\n\nАвтор: ${news.author}\n${news.time.hour}:${news.time.minute}",
-                  leadingIcon:
-                      const Icon(Icons.newspaper_rounded, color: Colors.green),
+                 return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ListTile(
+                    leading: const Icon(Icons.person, color: Colors.blue),
+                    title: Text(news.news.split('.').first,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle:
+                        Text( "${news.news}\n\nАвтор: ${news.author}\n${news.time.hour}:${news.time.minute}",),
+                  ),
                 );
+                //   ExpandableCard(
+                //   title: news.news.split('.').first,
+                //   subtitle:
+                //       "${news.news}\n\nАвтор: ${news.author}\n${news.time.hour}:${news.time.minute}",
+                //   leadingIcon:
+                //       const Icon(Icons.newspaper_rounded, color: Colors.green),
+                // );
               },
             ),
             error: (message) => Center(child: Text(message)),
