@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repositories/team_composition_repository.dart';
-import '../../utils/service_locator.dart';
+import '../../../repositories/team_composition_repository.dart';
+import '../../../utils/service_locator.dart';
 import 'team_composition_state.dart';
 
 class TeamCompositionCubit extends Cubit<TeamCompositionState> {

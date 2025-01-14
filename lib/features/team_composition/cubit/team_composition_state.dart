@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../data/team_composition_model.dart';
+import '../../../data/team_composition_model.dart';
 
 part 'team_composition_state.freezed.dart';
 

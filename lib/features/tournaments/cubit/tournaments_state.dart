@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../data/tournaments_model.dart';
+import '../../../data/tournaments_model.dart';
 
 part 'tournaments_state.freezed.dart';
 

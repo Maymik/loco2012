@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repositories/coaches_repository.dart';
+import '../../../repositories/coaches_repository.dart';
 import 'coaches_state.dart';
-import '../../utils/service_locator.dart';
+import '../../../utils/service_locator.dart';
 
 class CoachesCubit extends Cubit<CoachesState> {
   final CoachesRepository _coachesRepository = getIt<CoachesRepository>();
