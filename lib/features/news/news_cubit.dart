@@ -1,11 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/news_model.dart';
+import '../../repositories/news_repository.dart';
 import '../../utils/service_locator.dart';
 import 'news_state.dart';
 
 class NewsCubit extends Cubit<NewsState> {
-  final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
+  final NewsRepository _newsRepository = getIt<NewsRepository>();
 
   NewsCubit() : super(const NewsState.initial()) {
     subscribeToNews();
@@ -14,16 +13,7 @@ class NewsCubit extends Cubit<NewsState> {
   void subscribeToNews() {
     emit(const NewsState.loading());
 
-    _firestore
-        .collection('news')
-        .orderBy('time', descending: true)
-        .snapshots()
-        .listen((querySnapshot) {
-      final newsList = querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return NewsModel.fromJson(data, doc.id);
-      }).toList();
-
+    _newsRepository.getNews().listen((newsList) {
       emit(NewsState.loaded(newsList));
     }, onError: (e) {
       emit(NewsState.error('Помилка завантаження: ${e.toString()}'));
