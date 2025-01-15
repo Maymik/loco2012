@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/constants.dart';
@@ -5,6 +6,7 @@ import '../../../widgets/custom_expandable_card.dart';
 import '../cubit/coaches_cubit.dart';
 import '../cubit/coaches_state.dart';
 
+@RoutePage(name: 'CoachesRoute')
 class CoachesScreen extends StatelessWidget {
   const CoachesScreen({super.key});
 

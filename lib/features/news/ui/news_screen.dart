@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/constants.dart';
@@ -5,6 +6,7 @@ import '../cubit/news_cubit.dart';
 import 'news_detail.dart';
 import '../cubit/news_state.dart';
 
+@RoutePage(name: 'NewsRoute')
 
 class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key});
