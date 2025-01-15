@@ -1,10 +1,10 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loco_2012/features/team_composition/team_composition_cubit.dart';
-import 'package:loco_2012/features/team_composition/team_composition_state.dart';
+import 'package:loco_2012/features/team_composition/cubit/team_composition_cubit.dart';
+import 'package:loco_2012/features/team_composition/cubit/team_composition_state.dart';
 
-import '../../utils/constants.dart';
+import '../../../utils/constants.dart';
 
 @RoutePage(name: 'TeamCompositionRoute')
 class TeamCompositionScreen extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../utils/constants.dart';
-import '../../widgets/custom_expandable_card.dart';
-import 'coaches_cubit.dart';
-import 'coaches_state.dart';
+import '../../../utils/constants.dart';
+import '../../../widgets/custom_expandable_card.dart';
+import '../cubit/coaches_cubit.dart';
+import '../cubit/coaches_state.dart';
 
 class CoachesScreen extends StatelessWidget {
   const CoachesScreen({super.key});

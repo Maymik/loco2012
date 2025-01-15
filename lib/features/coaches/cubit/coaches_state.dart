@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../data/coaches_model.dart';
+import '../../../data/coaches_model.dart';
 
 
 part 'coaches_state.freezed.dart';

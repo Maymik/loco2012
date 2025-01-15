@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repositories/schedule_repository.dart';
-import '../../utils/service_locator.dart';
+import '../../../repositories/schedule_repository.dart';
+import '../../../utils/service_locator.dart';
 import 'schedule_state.dart';
 
 class ScheduleCubit extends Cubit<ScheduleState> {

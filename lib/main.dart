@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/utils/service_locator.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
-import 'features/coaches/coaches_cubit.dart';
-import 'features/coaches/coaches_screen.dart';
-import 'features/news/news_cubit.dart';
-import 'features/news/news_screen.dart';
-import 'features/schedule/schedule_cubit.dart';
-import 'features/schedule/schedule_screen.dart';
-import 'features/team_composition/team_composition_cubit.dart';
-import 'features/team_composition/team_composition_screen.dart';
-import 'features/tournaments/tournaments_cubit.dart';
-import 'features/tournaments/tournaments_screen.dart';
+import 'features/coaches/cubit/coaches_cubit.dart';
+import 'features/coaches/ui/coaches_screen.dart';
+import 'features/news/cubit/news_cubit.dart';
+import 'features/news/ui/news_screen.dart';
+import 'features/schedule/cubit/schedule_cubit.dart';
+import 'features/schedule/ui/schedule_screen.dart';
+import 'features/team_composition/cubit/team_composition_cubit.dart';
+import 'features/team_composition/ui/team_composition_screen.dart';
+import 'features/tournaments/cubit/tournaments_cubit.dart';
+import 'features/tournaments/ui/tournaments_screen.dart';
 import 'firebase_options.dart';
 
 
@@ -52,11 +52,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _currentIndex = index;
     });
-    _pageController?.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    _pageController?.jumpToPage(index);
   }
 
   @override

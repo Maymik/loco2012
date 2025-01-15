@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../utils/constants.dart';
-import 'news_cubit.dart';
+import '../../../utils/constants.dart';
+import '../cubit/news_cubit.dart';
 import 'news_detail.dart';
-import 'news_state.dart';
+import '../cubit/news_state.dart';
 
 
 class NewsScreen extends StatelessWidget {

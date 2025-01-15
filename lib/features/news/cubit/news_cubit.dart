@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repositories/news_repository.dart';
-import '../../utils/service_locator.dart';
+import '../../../repositories/news_repository.dart';
+import '../../../utils/service_locator.dart';
 import 'news_state.dart';
 
 class NewsCubit extends Cubit<NewsState> {
