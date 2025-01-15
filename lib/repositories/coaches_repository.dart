@@ -6,15 +6,23 @@ class CoachesRepository {
   final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
 
   Stream<List<Coach>> getCoaches() {
-    return _firestore
-        .collection('coach')
-        .orderBy('rank', descending: false)
-        .snapshots()
-        .map((querySnapshot) {
-      return querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return Coach.fromJson(data, doc.id);
-      }).toList();
-    });
+    try {
+      return _firestore
+          .collection('coach')
+          .orderBy('rank', descending: false)
+          .snapshots()
+          .handleError((error) {
+        print('Error fetching coaches: $error');
+      })
+          .map((querySnapshot) {
+        return querySnapshot.docs.map((doc) {
+          final data = doc.data();
+          return Coach.fromJson(data, doc.id);
+        }).toList();
+      });
+    } catch (e) {
+      print('Synchronous error: $e');
+      return Stream.error(e);
+    }
   }
 }
