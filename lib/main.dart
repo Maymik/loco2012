@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/utils/service_locator.dart';
 import 'package:loco_2012/widgets/custom_bottom_navigation_bar.dart';
+import 'package:loco_2012/widgets/custom_circular_indicator.dart';
 import 'features/coaches/cubit/coaches_cubit.dart';
 import 'features/coaches/ui/coaches_screen.dart';
 import 'features/news/cubit/news_cubit.dart';
@@ -74,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         ),
         home: Scaffold(
           body: _pageController == null
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: FootballProgressIndicator(value: 0.7))
               : PageView(
                   controller: _pageController,
                   onPageChanged: (index) {

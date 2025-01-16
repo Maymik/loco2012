@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/constants.dart';
+import '../../../widgets/custom_circular_indicator.dart';
 import '../cubit/news_cubit.dart';
 import 'news_detail.dart';
 import '../cubit/news_state.dart';
@@ -32,7 +33,7 @@ class NewsScreen extends StatelessWidget {
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: Text('')),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: FootballProgressIndicator(value: 0.7)),
             loaded: (newsList) => ListView.builder(
               itemCount: newsList.length,
               itemBuilder: (context, index) {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/features/schedule/cubit/schedule_cubit.dart';
 import 'package:loco_2012/features/schedule/cubit/schedule_state.dart';
 import '../../../utils/constants.dart';
+import '../../../widgets/custom_circular_indicator.dart';
 import '../../../widgets/custom_expandable_card.dart';
 
 @RoutePage(name: 'ScheduleRoute')
@@ -32,7 +33,7 @@ class ScheduleScreen extends StatelessWidget {
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: Text('')),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: FootballProgressIndicator(value: 0.7)),
             loaded: (scheduleList) => ListView.builder(
               itemCount: scheduleList.length,
               itemBuilder: (context, index) {
