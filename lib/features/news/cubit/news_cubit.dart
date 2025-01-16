@@ -13,10 +13,19 @@ class NewsCubit extends Cubit<NewsState> {
   void subscribeToNews() {
     emit(const NewsState.loading());
 
-    _newsRepository.getNews().listen((newsList) {
-      emit(NewsState.loaded(newsList));
-    }, onError: (e) {
-      emit(NewsState.error('Помилка завантаження: ${e.toString()}'));
-    });
+    try {
+      _newsRepository.getNews().listen(
+            (newsList) {
+          emit(NewsState.loaded(newsList));
+        },
+        onError: (e, stackTrace) {
+          emit(NewsState.error('Помилка завантаження: ${e.toString()}'));
+          print('Помилка в NewsCubit: $e\n$stackTrace');
+        },
+      );
+    } catch (e, stackTrace) {
+      emit(NewsState.error('Критична помилка: ${e.toString()}'));
+      print('Критична помилка в subscribeToNews: $e\n$stackTrace');
+    }
   }
 }

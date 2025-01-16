@@ -11,10 +11,19 @@ class TeamCompositionCubit extends Cubit<TeamCompositionState> {
   void subscribeTeamComposition() {
     emit(const TeamCompositionState.loading());
 
-    _teamCompositionRepository.getTeamComposition().listen((teamList) {
-      emit(TeamCompositionState.loaded(teamList));
-    }, onError: (e) {
-      emit(TeamCompositionState.error('Помилка завантаження: ${e.toString()}'));
-    });
+    try {
+      _teamCompositionRepository.getTeamComposition().listen(
+            (teamList) {
+          emit(TeamCompositionState.loaded(teamList));
+        },
+        onError: (e, stackTrace) {
+          emit(TeamCompositionState.error('Помилка завантаження: ${e.toString()}'));
+          print('Помилка в TeamCompositionCubit: $e\n$stackTrace');
+        },
+      );
+    } catch (e, stackTrace) {
+      emit(TeamCompositionState.error('Критична помилка: ${e.toString()}'));
+      print('Критична помилка в subscribeTeamComposition: $e\n$stackTrace');
+    }
   }
 }

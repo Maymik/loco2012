@@ -11,10 +11,19 @@ class TournamentsCubit extends Cubit<TournamentsState> {
   void subscribeToTournaments() {
     emit(const TournamentsState.loading());
 
-    _tournamentsRepository.getTournaments().listen((tournamentsList) {
-      emit(TournamentsState.loaded(tournamentsList));
-    }, onError: (e) {
-      emit(TournamentsState.error('Помилка завантаження: ${e.toString()}'));
-    });
+    try {
+      _tournamentsRepository.getTournaments().listen(
+            (tournamentsList) {
+          emit(TournamentsState.loaded(tournamentsList));
+        },
+        onError: (e, stackTrace) {
+          emit(TournamentsState.error('Помилка завантаження: ${e.toString()}'));
+          print('Помилка в TournamentsCubit: $e\n$stackTrace');
+        },
+      );
+    } catch (e, stackTrace) {
+      emit(TournamentsState.error('Критична помилка: ${e.toString()}'));
+      print('Критична помилка в subscribeToTournaments: $e\n$stackTrace');
+    }
   }
 }

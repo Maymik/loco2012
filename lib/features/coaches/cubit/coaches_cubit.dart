@@ -11,10 +11,21 @@ class CoachesCubit extends Cubit<CoachesState> {
   void subscribeCoaches() async {
     emit(const CoachesState.loading());
 
-    _coachesRepository.getCoaches().listen((coachesList) {
-      emit(CoachesState.loaded(coachesList));
-    }, onError: (e) {
-      emit(CoachesState.error('Помилка завантаження: ${e.toString()}'));
-    });
+    try {
+      await Future.delayed(Duration.zero);
+
+      _coachesRepository.getCoaches().listen(
+            (coachesList) {
+          emit(CoachesState.loaded(coachesList));
+        },
+        onError: (e, stackTrace) {
+          emit(CoachesState.error('Помилка завантаження: ${e.toString()}'));
+          print('Помилка в CoachesCubit: $e\n$stackTrace');
+        },
+      );
+    } catch (e, stackTrace) {
+      emit(CoachesState.error('Критична помилка : ${e.toString()}'));
+      print('Критична помилка в subscribeCoaches: $e\n$stackTrace');
+    }
   }
 }

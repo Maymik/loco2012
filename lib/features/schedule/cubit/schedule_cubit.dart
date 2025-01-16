@@ -11,10 +11,19 @@ class ScheduleCubit extends Cubit<ScheduleState> {
   void subscribeToSchedule() {
     emit(const ScheduleState.loading());
 
-    _scheduleRepository.getSchedule().listen((scheduleList) {
-      emit(ScheduleState.loaded(scheduleList));
-    }, onError: (e) {
-      emit(ScheduleState.error('Помилка завантаження: ${e.toString()}'));
-    });
+    try {
+      _scheduleRepository.getSchedule().listen(
+            (scheduleList) {
+          emit(ScheduleState.loaded(scheduleList));
+        },
+        onError: (e, stackTrace) {
+          emit(ScheduleState.error('Помилка завантаження: ${e.toString()}'));
+          print('Помилка в ScheduleCubit: $e\n$stackTrace');
+        },
+      );
+    } catch (e, stackTrace) {
+      emit(ScheduleState.error('Критична помилка: ${e.toString()}'));
+      print('Критична помилка в subscribeToSchedule: $e\n$stackTrace');
+    }
   }
 }

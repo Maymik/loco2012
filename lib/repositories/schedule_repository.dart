@@ -6,15 +6,23 @@ class ScheduleRepository {
   final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
 
   Stream<List<Schedule>> getSchedule() {
-    return _firestore
-        .collection('schedule')
-        .orderBy('id', descending: false)
-        .snapshots()
-        .map((querySnapshot) {
-      return querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return Schedule.fromJson(data, doc.id);
-      }).toList();
-    });
+    try {
+      return _firestore
+          .collection('schedule')
+          .orderBy('id', descending: false)
+          .snapshots()
+          .handleError((error) {
+        print('Error fetching schedule: $error');
+      })
+          .map((querySnapshot) {
+        return querySnapshot.docs.map((doc) {
+          final data = doc.data();
+          return Schedule.fromJson(data, doc.id);
+        }).toList();
+      });
+    } catch (e) {
+      print('Synchronous error: $e');
+      return Stream.error(e);
+    }
   }
 }
