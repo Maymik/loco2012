@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'coaches_model.g.dart';
+
+@JsonSerializable()
 class Coach {
   final String position;
   final String name;
@@ -10,25 +15,20 @@ class Coach {
     required this.name,
     required this.info,
     required this.rank,
-    required this.id,
+    this.id = '',
   });
 
-  factory Coach.fromJson(Map<String, dynamic> json, String documentId) {
-    return Coach(
-      position: json['position'] ?? 'Невідомо',
-      name: json['name'] ?? 'Невідомо',
-      info: json['info'] ?? 'Немає інформації',
-      rank: json['rank'] ?? 'Невідомо',
-      id: documentId,
-    );
-  }
+  factory Coach.fromJson(Map<String, dynamic> json, String documentId) => _$CoachFromJson(json).copyWith(id: documentId);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'position': position,
-      'name': name,
-      'info': info,
-      'rank': rank,
-    };
+  Map<String, dynamic> toJson() => _$CoachToJson(this);
+
+  Coach copyWith({String? id}) {
+    return Coach(
+      position: position,
+      name: name,
+      info: info,
+      rank: rank,
+      id: id ?? this.id,
+    );
   }
 }
