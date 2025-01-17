@@ -1,5 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'tournaments_model.g.dart';
+
+@JsonSerializable()
 class Tournament {
   final DateTime date;
   final String name;
@@ -16,21 +19,25 @@ class Tournament {
   });
 
   factory Tournament.fromJson(Map<String, dynamic> json, String documentId) {
-    return Tournament(
-      date: (json['date'] as Timestamp).toDate(),
-      name: json['name'] ?? 'Невідомий турнір',
-      city: json['city'] ?? 'Невідомо',
-      stadium: json['stadium'] ?? 'Невідомий стадіон',
-      id: documentId,
-    );
+    final model = _$TournamentFromJson(json);
+    return model.copyWith(id: documentId);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'date': date,
-      'name': name,
-      'city': city,
-      'stadium': stadium,
-    };
+  Map<String, dynamic> toJson() => _$TournamentToJson(this);
+
+  Tournament copyWith({
+    DateTime? date,
+    String? name,
+    String? city,
+    String? stadium,
+    String? id,
+  }) {
+    return Tournament(
+      date: date ?? this.date,
+      name: name ?? this.name,
+      city: city ?? this.city,
+      stadium: stadium ?? this.stadium,
+      id: id ?? this.id,
+    );
   }
 }

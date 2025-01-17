@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'schedule_model.g.dart';
+
+@JsonSerializable()
 class Schedule {
   final String day;
   final String time;
@@ -12,19 +17,23 @@ class Schedule {
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json, String id) {
-    return Schedule(
-      day: json['day'] as String,
-      time: json['time'] as String,
-      location: json['location'] as String,
-      id: id,
-    );
+    final model = _$ScheduleFromJson(json);
+    return model.copyWith(id: id);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'day': day,
-      'time': time,
-      'location': location,
-    };
+  Map<String, dynamic> toJson() => _$ScheduleToJson(this);
+
+  Schedule copyWith({
+    String? day,
+    String? time,
+    String? location,
+    String? id,
+  }) {
+    return Schedule(
+      day: day ?? this.day,
+      time: time ?? this.time,
+      location: location ?? this.location,
+      id: id ?? this.id,
+    );
   }
 }
