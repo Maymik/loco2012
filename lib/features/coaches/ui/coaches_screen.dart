@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/widgets/custom_circular_indicator.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_expandable_card.dart';
 import '../cubit/coaches_cubit.dart';
@@ -31,7 +32,7 @@ class CoachesScreen extends StatelessWidget {
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: Text('')),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: FootballProgressIndicator(value: 0.7)),
             loaded: (coaches) => ListView.builder(
               itemCount: coaches.length,
               itemBuilder: (context, index) {

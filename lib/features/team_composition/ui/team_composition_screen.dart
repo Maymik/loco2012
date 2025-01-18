@@ -5,6 +5,7 @@ import 'package:loco_2012/features/team_composition/cubit/team_composition_cubit
 import 'package:loco_2012/features/team_composition/cubit/team_composition_state.dart';
 
 import '../../../utils/constants.dart';
+import '../../../widgets/custom_circular_indicator.dart';
 
 @RoutePage(name: 'TeamCompositionRoute')
 class TeamCompositionScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class TeamCompositionScreen extends StatelessWidget {
             initial: () => const Center(
               child: Text(''),
             ),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: FootballProgressIndicator(value: 0.7)),
             loaded: (teamPlayers) => ListView.builder(
               itemCount: teamPlayers.length,
               itemBuilder: (context, index) {
