@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         ),
         home: Scaffold(
           body: _pageController == null
-              ? const Center(child: FootballProgressIndicator(value: 0.7))
+              ? const Center(child: FootballLoadingIndicator())
               : PageView(
                   controller: _pageController,
                   onPageChanged: (index) {

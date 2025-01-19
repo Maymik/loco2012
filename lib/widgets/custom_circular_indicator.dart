@@ -1,69 +1,52 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class FootballProgressIndicator extends StatelessWidget {
-final double value;
+class FootballLoadingIndicator extends StatefulWidget {
+  const FootballLoadingIndicator({super.key, this.size = 50.0});
 
-const FootballProgressIndicator({super.key, required this.value});
-
-@override
-Widget build(BuildContext context) {
-  return CustomPaint(
-    size: const Size(100, 100),
-    painter: FootballProgressPainter(value: value),
-  );
-}
-}
-
-class FootballProgressPainter extends CustomPainter {
-  final double value;
-
-  FootballProgressPainter({required this.value});
+  final double size;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final double radius = size.width / 2;
-    final Offset center = Offset(radius, radius);
-    final Paint paint = Paint()
-      ..color = Colors.green
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 10;
+  FootballLoadingIndicatorState createState() =>
+      FootballLoadingIndicatorState();
+}
 
-    canvas.drawCircle(center, radius, paint);
+class FootballLoadingIndicatorState extends State<FootballLoadingIndicator>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
 
-    final double sweepAngle = 2 * pi * value;
-    paint.color = Colors.white;
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -pi / 2,
-      sweepAngle,
-      false,
-      paint,
-    );
-
-    final Paint ballPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, radius * 0.2, ballPaint);
-
-    final Paint spotPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-    final double spotRadius = radius * 0.05;
-    final List<Offset> spotPositions = [
-      Offset(center.dx - radius * 0.1, center.dy - radius * 0.1),
-      Offset(center.dx + radius * 0.1, center.dy - radius * 0.1),
-      Offset(center.dx - radius * 0.1, center.dy + radius * 0.1),
-      Offset(center.dx + radius * 0.1, center.dy + radius * 0.1),
-    ];
-    for (Offset position in spotPositions) {
-      canvas.drawCircle(position, spotRadius, spotPaint);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform.rotate(
+            angle: _controller.value * 2 * 3.1416,
+            child: child,
+          );
+        },
+        child: Image.asset(
+          'assets/app_icon.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
   }
 }

@@ -32,7 +32,7 @@ class CoachesScreen extends StatelessWidget {
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: Text('')),
-            loading: () => const Center(child: FootballProgressIndicator(value: 0.7)),
+            loading: () =>  const Center(child: FootballLoadingIndicator()),
             loaded: (coaches) => ListView.builder(
               itemCount: coaches.length,
               itemBuilder: (context, index) {
