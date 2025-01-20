@@ -19,8 +19,7 @@ class NewsDetailScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.red,
-        title: Text(
-          news.news.split('.').first,
+        title: Text( news.title,
           style: const TextStyle(
             color: Colors.green,
             fontSize: 32,
