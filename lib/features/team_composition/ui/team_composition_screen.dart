@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/features/team_composition/cubit/team_composition_cubit.dart';
 import 'package:loco_2012/features/team_composition/cubit/team_composition_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_circular_indicator.dart';
@@ -32,6 +33,27 @@ class TeamCompositionScreen extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'Instagram') {
+                launchUrl(Uri.parse('https://www.instagram.com/lokomotyv.ua/'));
+              } else if (value == 'Facebook') {
+                launchUrl(Uri.parse('https://www.facebook.com/lokomotyv2012/'));
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'Instagram',
+                child: Text('Ми в Instagram'),
+              ),
+              const PopupMenuItem(
+                value: 'Facebook',
+                child: Text('Ми в Facebook'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: BlocBuilder<TeamCompositionCubit, TeamCompositionState>(
         builder: (context, state) {
