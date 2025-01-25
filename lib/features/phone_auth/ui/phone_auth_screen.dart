@@ -110,7 +110,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
           if (state is PhoneAuthCodeSent) {
             _verificationId = state.verificationId;
           } else if (state is PhoneAuthSuccess) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, '/news');
           } else if (state is PhoneAuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
