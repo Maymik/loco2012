@@ -55,14 +55,20 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         builder: (context, router) {
-          return BlocBuilder<PhoneAuthCubit, PhoneAuthState>(
-            builder: (context, state) {
-              if (state is PhoneAuthSuccess) {
-                return const MainContent();
-              } else {
-                return const PhoneAuthScreen();
-              }
-            },
+          return Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (_) => BlocBuilder<PhoneAuthCubit, PhoneAuthState>(
+                  builder: (context, state) {
+                    if (state is PhoneAuthSuccess) {
+                      return const MainContent();
+                    } else {
+                      return const PhoneAuthScreen();
+                    }
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -74,10 +80,10 @@ class MainContent extends StatefulWidget {
   const MainContent({super.key});
 
   @override
-  _MainContentState createState() => _MainContentState();
+  MainContentState createState() => MainContentState();
 }
 
-class _MainContentState extends State<MainContent> {
+class MainContentState extends State<MainContent> {
   int _currentIndex = 0;
   PageController? _pageController;
 
