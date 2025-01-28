@@ -17,8 +17,8 @@ class PhoneAuthScreenState extends State<PhoneAuthScreen> {
   String? _verificationId;
 
   bool _isPhoneNumberValid(String phoneNumber) {
-    final RegExp e164Regex = RegExp(r'^\+[1-9]\d{1,14}$');
-    return e164Regex.hasMatch(phoneNumber);
+    final RegExp regExp = RegExp(r'^\+[1-9]\d{1,14}$');
+    return regExp.hasMatch(phoneNumber);
   }
 
   @override
