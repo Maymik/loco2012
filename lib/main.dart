@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
               OverlayEntry(
                 builder: (_) => BlocBuilder<PhoneAuthCubit, PhoneAuthState>(
                   builder: (context, state) {
-                    if (state is PhoneAuthSuccess) {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (state is PhoneAuthSuccess || user != null) {
                       return const MainContent();
                     } else {
                       return const PhoneAuthScreen();

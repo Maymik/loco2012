@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
@@ -6,6 +7,7 @@ part 'phone_auth_state.dart';
 
 class PhoneAuthCubit extends Cubit<PhoneAuthState> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   PhoneAuthCubit() : super(PhoneAuthInitial());
 
@@ -15,8 +17,7 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
-          await _firebaseAuth.signInWithCredential(credential);
-          emit(PhoneAuthSuccess());
+          await _signInAndCreateUser(credential, phoneNumber);
         },
         verificationFailed: (FirebaseAuthException e) {
           emit(PhoneAuthFailure(e.message ?? 'Verification failed'));
@@ -38,8 +39,33 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
         verificationId: verificationId,
         smsCode: smsCode,
       );
-      await _firebaseAuth.signInWithCredential(credential);
-      emit(PhoneAuthSuccess());
+      await _signInAndCreateUser(credential, null);
+    } catch (e) {
+      emit(PhoneAuthFailure(e.toString()));
+    }
+  }
+
+  Future<void> _signInAndCreateUser(
+      PhoneAuthCredential credential, String? phoneNumber) async {
+    try {
+      UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        final phone = phoneNumber ?? user.phoneNumber;
+
+        if (phone != null) {
+          await _firestore.collection('users').doc(user.uid).set({
+            'id': user.uid,
+            'phone': phone,
+          }, SetOptions(merge: true));
+        }
+
+        emit(PhoneAuthSuccess());
+      } else {
+        emit(PhoneAuthFailure('User is null'));
+      }
     } catch (e) {
       emit(PhoneAuthFailure(e.toString()));
     }
