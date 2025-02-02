@@ -122,12 +122,18 @@ class MainContentState extends State<MainContent> {
                   _currentIndex = index;
                 });
               },
-              children: const [
-                NewsScreen(),
-                ScheduleScreen(),
-                TeamCompositionScreen(),
-                CoachesScreen(),
-                TournamentsScreen(),
+              children: [
+                Navigator(
+                  onGenerateRoute: (settings) {
+                    return MaterialPageRoute(
+                      builder: (context) => const NewsScreen(),
+                    );
+                  },
+                ),
+                const ScheduleScreen(),
+                const TeamCompositionScreen(),
+                const CoachesScreen(),
+                const TournamentsScreen(),
               ],
             ),
       bottomNavigationBar: CustomBottomNavigationBar(
