@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/utils/firebase_messaging_service.dart';
+import 'package:loco_2012/utils/notification_service.dart';
 import 'package:loco_2012/utils/service_locator.dart';
 
 import 'features/coaches/cubit/coaches_cubit.dart';
@@ -28,6 +29,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessagingService().initNotifications();
+  await NotificationService().init();
   setupLocator();
   runApp(MyApp());
 }
@@ -132,7 +134,14 @@ class MainContentState extends State<MainContent> {
                 ),
                 const ScheduleScreen(),
                 const TeamCompositionScreen(),
-                const CoachesScreen(),
+                // const CoachesScreen(),
+                Navigator(
+                  onGenerateRoute: (settings) {
+                    return MaterialPageRoute(
+                      builder: (context) => const CoachesScreen(),
+                    );
+                  },
+                ),
                 const TournamentsScreen(),
               ],
             ),
