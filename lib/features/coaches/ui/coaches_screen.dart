@@ -20,25 +20,32 @@ class CoachesScreen extends StatelessWidget {
       appBar: const CustomAppBar(
         title: AppConstants.coaches,
       ),
-      body: BlocBuilder<CoachesCubit, CoachesState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => const Center(child: Text('')),
-            loading: () =>  const Center(child: FootballLoadingIndicator()),
-            loaded: (coaches) => ListView.builder(
-              itemCount: coaches.length,
-              itemBuilder: (context, index) {
-                final coach = coaches[index];
-                return ExpandableCard(
-                  title: "${coach.position} - ${coach.name}",
-                  subtitle: coach.info,
-                  leadingIcon: const Icon(Icons.person, color: Colors.blue),
-                );
-              },
-            ),
-            error: (message) => Center(child: Text(message)),
-          );
-        },
+      body: Column(
+        children: [
+          BlocBuilder<CoachesCubit, CoachesState>(
+            builder: (context, state) {
+              return state.when(
+                initial: () => const Center(child: Text('')),
+                loading: () => const Center(child: FootballLoadingIndicator()),
+                loaded: (coaches) => Expanded(
+                  child: ListView.builder(
+                    itemCount: coaches.length,
+                    itemBuilder: (context, index) {
+                      final coach = coaches[index];
+                      return ExpandableCard(
+                        title: "${coach.position} - ${coach.name}",
+                        subtitle: coach.info,
+                        leadingIcon:
+                            const Icon(Icons.person, color: Colors.blue),
+                      );
+                    },
+                  ),
+                ),
+                error: (message) => Center(child: Text(message)),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

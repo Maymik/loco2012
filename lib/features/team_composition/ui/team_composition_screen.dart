@@ -5,8 +5,11 @@ import 'package:loco_2012/features/team_composition/cubit/team_composition_cubit
 import 'package:loco_2012/features/team_composition/cubit/team_composition_state.dart';
 
 import '../../../utils/constants.dart';
+import '../../../utils/notification_service.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_circular_indicator.dart';
+import '../../news/cubit/news_cubit.dart';
+import '../../news/cubit/news_state.dart';
 
 @RoutePage(name: 'TeamCompositionRoute')
 class TeamCompositionScreen extends StatelessWidget {
@@ -19,37 +22,59 @@ class TeamCompositionScreen extends StatelessWidget {
       appBar: const CustomAppBar(
         title: AppConstants.teamComposition,
       ),
-      body: BlocBuilder<TeamCompositionCubit, TeamCompositionState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => const Center(
-              child: Text(''),
-            ),
-            loading: () =>  const Center(child: FootballLoadingIndicator()),
-            loaded: (teamPlayers) => ListView.builder(
-              itemCount: teamPlayers.length,
-              itemBuilder: (context, index) {
-                final player = teamPlayers[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    leading: const Icon(Icons.person, color: Colors.blue),
-                    title: Text(player.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Номер: ${player.number}'),
-                        Text('Позиція: ${player.position}'),
-                      ],
-                    ),
+      body: Column(
+        children: [
+          Expanded(
+            child: BlocBuilder<TeamCompositionCubit, TeamCompositionState>(
+              builder: (context, state) {
+                return state.when(
+                  initial: () => const Center(
+                    child: Text(''),
                   ),
+                  loading: () =>
+                      const Center(child: FootballLoadingIndicator()),
+                  loaded: (teamPlayers) => ListView.builder(
+                    itemCount: teamPlayers.length,
+                    itemBuilder: (context, index) {
+                      final player = teamPlayers[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: ListTile(
+                          leading: const Icon(Icons.person, color: Colors.blue),
+                          title: Text(player.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Номер: ${player.number}'),
+                              Text('Позиція: ${player.position}'),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  error: (message) => Center(child: Text(message)),
                 );
               },
             ),
-            error: (message) => Center(child: Text(message)),
-          );
-        },
+          ),
+          BlocBuilder<NewsCubit, NewsState>(builder: (context, state) {
+            return state.when(
+                initial: () => const Center(child: Text('')),
+                loading: () => const Center(child: FootballLoadingIndicator()),
+                loaded: (newsList) => FloatingActionButton(
+                      onPressed: () {
+                        NotificationService()
+                            .showNotification(newsId: newsList.first.id);
+                      },
+                      child: const Icon(Icons.notifications),
+                    ),
+                error: (message) => Center(child: Text(message)));
+          })
+        ],
       ),
     );
   }
