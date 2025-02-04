@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../data/news_model.dart';
 import '../../utils/service_locator.dart';
 
@@ -13,8 +14,7 @@ class NewsRepository {
           .snapshots()
           .handleError((error) {
         print('Error fetching news: $error');
-      })
-          .map((querySnapshot) {
+      }).map((querySnapshot) {
         return querySnapshot.docs.map((doc) {
           final data = doc.data();
           return NewsModel.fromJson(data, doc.id);
@@ -23,6 +23,20 @@ class NewsRepository {
     } catch (e) {
       print('Synchronous error: $e');
       return Stream.error(e);
+    }
+  }
+
+  Future<NewsModel?> getNewsById(String newsId) async {
+    try {
+      final doc = await _firestore.collection('news').doc(newsId).get();
+      if (doc.exists) {
+        return NewsModel.fromJson(doc.data()!, doc.id);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Ошибка при получении новости по ID: $e');
+      return null;
     }
   }
 }

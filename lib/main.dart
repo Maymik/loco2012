@@ -9,6 +9,7 @@ import 'package:loco_2012/utils/service_locator.dart';
 import 'features/coaches/cubit/coaches_cubit.dart';
 import 'features/coaches/ui/coaches_screen.dart';
 import 'features/news/cubit/news_cubit.dart';
+import 'features/news/ui/news_detail.dart';
 import 'features/news/ui/news_screen.dart';
 import 'features/phone_auth/cubit/phone_auth_cubit.dart';
 import 'features/phone_auth/ui/phone_auth_screen.dart';
@@ -19,7 +20,6 @@ import 'features/team_composition/ui/team_composition_screen.dart';
 import 'features/tournaments/cubit/tournaments_cubit.dart';
 import 'features/tournaments/ui/tournaments_screen.dart';
 import 'firebase_options.dart';
-import 'navigation/app_router.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 import 'widgets/custom_circular_indicator.dart';
 
@@ -28,19 +28,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessagingService().initNotifications();
-  await NotificationService().init();
+
   setupLocator();
-  runApp(MyApp());
+  FirebaseMessagingService().initNotifications();
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
-
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+    NotificationService().init(navigatorKey);
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => PhoneAuthCubit()),
@@ -51,15 +54,23 @@ class MyApp extends StatelessWidget {
             create: (_) => TeamCompositionCubit()..subscribeTeamComposition()),
         BlocProvider(create: (_) => ScheduleCubit()..subscribeToSchedule()),
       ],
-      child: MaterialApp.router(
-        routerDelegate: _appRouter.delegate(),
-        routeInformationParser: _appRouter.defaultRouteParser(),
+      child: MaterialApp(
         title: 'Loko2012',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        builder: (context, router) {
+        navigatorKey: navigatorKey,
+        onGenerateRoute: (settings) {
+          if (settings.name == '/newsDetail') {
+            final String newsId = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (context) => NewsDetailScreen(newsId: newsId),
+            );
+          }
+          return null;
+        },
+        builder: (context, child) {
           return Overlay(
             initialEntries: [
               OverlayEntry(
@@ -134,7 +145,6 @@ class MainContentState extends State<MainContent> {
                 ),
                 const ScheduleScreen(),
                 const TeamCompositionScreen(),
-                // const CoachesScreen(),
                 Navigator(
                   onGenerateRoute: (settings) {
                     return MaterialPageRoute(

@@ -1,0 +1,2 @@
+/home/mike/loco2012/android/app/.cxx/RelWithDebInfo/3o6bu4b5/x86_64/CMakeFiles/edit_cache.dir
+/home/mike/loco2012/android/app/.cxx/RelWithDebInfo/3o6bu4b5/x86_64/CMakeFiles/rebuild_cache.dir

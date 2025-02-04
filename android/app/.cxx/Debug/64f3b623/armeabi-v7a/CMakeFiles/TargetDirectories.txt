@@ -1,0 +1,2 @@
+/home/mike/loco2012/android/app/.cxx/Debug/64f3b623/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/mike/loco2012/android/app/.cxx/Debug/64f3b623/armeabi-v7a/CMakeFiles/rebuild_cache.dir
