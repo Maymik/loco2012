@@ -28,10 +28,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+//  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   setupLocator();
   FirebaseMessagingService().initNotifications();
-
+  // NotificationService().init(navigatorKey);
   runApp(const MyApp());
 }
 
@@ -40,10 +40,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-    NotificationService().init(navigatorKey);
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => PhoneAuthCubit()),
