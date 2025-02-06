@@ -69,6 +69,7 @@ class TeamCompositionScreen extends StatelessWidget {
                       onPressed: () {
                         NotificationService()
                             .showNotification(newsId: newsList.first.id);
+                        print(newsList.first.id);
                       },
                       child: const Icon(Icons.notifications),
                     ),

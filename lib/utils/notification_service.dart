@@ -4,9 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
 
-  factory NotificationService() {
-    return _instance;
-  }
+  factory NotificationService() => _instance;
 
   NotificationService._internal();
 
@@ -14,6 +12,8 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   GlobalKey<NavigatorState>? _navigatorKey;
+
+  GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
   Future<void> init(GlobalKey<NavigatorState> navigatorKey) async {
     _navigatorKey = navigatorKey;
@@ -28,28 +28,39 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.initialize(
       settings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print(
-            "Notification clicked: ${response.payload}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        print("🔔 Foreground notification clicked: ${response.payload}");
         _handleNotificationClick(response.payload);
       },
+      onDidReceiveBackgroundNotificationResponse: backgroundNotificationHandler,
     );
+
+    final details = await _flutterLocalNotificationsPlugin
+        .getNotificationAppLaunchDetails();
+    if (details?.didNotificationLaunchApp ?? false) {
+      print(
+          "🚀 App launched from notification! Payload: ${details!.notificationResponse?.payload}");
+      _handleNotificationClick(details.notificationResponse?.payload);
+    }
   }
 
   void _handleNotificationClick(String? payload) {
-    print(
-        "Handling notification click with payload: $payload !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    if (payload != null && _navigatorKey != null) {
-      _navigatorKey!.currentState?.pushNamed('/newsDetail', arguments: payload);
+    if (payload != null && _navigatorKey?.currentState != null) {
+      print('✅ Navigating to /newsDetail with payload: $payload');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _navigatorKey!.currentState!
+            .pushNamed('/newsDetail', arguments: payload);
+      });
     }
   }
 
   Future<void> showNotification({required String newsId}) async {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'team_composition_channel',
-      'Team Composition Notifications',
-      importance: Importance.high,
+      'new_channel',
+      'New Channel Notifications',
+      importance: Importance.max,
       priority: Priority.high,
+      playSound: true,
     );
 
     const NotificationDetails details = NotificationDetails(
@@ -64,4 +75,9 @@ class NotificationService {
       payload: newsId,
     );
   }
+}
+
+@pragma('vm:entry-point')
+void backgroundNotificationHandler(NotificationResponse response) {
+  print("🛑 Background notification clicked: ${response.payload}");
 }

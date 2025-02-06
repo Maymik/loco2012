@@ -24,6 +24,8 @@ import 'widgets/custom_bottom_navigation_bar.dart';
 import 'widgets/custom_circular_indicator.dart';
 
 void main() async {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -31,18 +33,17 @@ void main() async {
 
   setupLocator();
   FirebaseMessagingService().initNotifications();
-
-  runApp(const MyApp());
+  NotificationService().init(navigatorKey);
+  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const MyApp({super.key, required this.navigatorKey});
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-    NotificationService().init(navigatorKey);
 
     return MultiBlocProvider(
       providers: [
@@ -137,7 +138,14 @@ class MainContentState extends State<MainContent> {
               },
               children: [
                 Navigator(
+                  key: NotificationService().navigatorKey,
                   onGenerateRoute: (settings) {
+                    if (settings.name == '/newsDetail') {
+                      final String newsId = settings.arguments as String;
+                      return MaterialPageRoute(
+                        builder: (context) => NewsDetailScreen(newsId: newsId),
+                      );
+                    }
                     return MaterialPageRoute(
                       builder: (context) => const NewsScreen(),
                     );
@@ -145,13 +153,7 @@ class MainContentState extends State<MainContent> {
                 ),
                 const ScheduleScreen(),
                 const TeamCompositionScreen(),
-                Navigator(
-                  onGenerateRoute: (settings) {
-                    return MaterialPageRoute(
-                      builder: (context) => const CoachesScreen(),
-                    );
-                  },
-                ),
+                const CoachesScreen(),
                 const TournamentsScreen(),
               ],
             ),
