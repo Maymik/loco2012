@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,6 +6,7 @@ import '../../../widgets/custom_circular_indicator.dart';
 import '../cubit/news_detail_cubit.dart';
 import '../cubit/news_state.dart';
 
+@RoutePage(name: 'NewsDetailRoute')
 class NewsDetailScreen extends StatelessWidget {
   final String newsId;
 
