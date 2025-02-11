@@ -120,6 +120,8 @@
 //     }
 //   }
 // }
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -261,10 +263,20 @@ class FirebaseMessagingService {
 
   void _handleNotificationClick(String? payload) {
     if (payload != null && _navigatorKey?.currentState != null) {
-      print('✅ Переход на экран: $payload');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _navigatorKey!.currentState!.pushNamed(payload);
-      });
+      try {
+        final Map<String, dynamic> data = jsonDecode(payload);
+        String screen = data['screen'];
+        String? newsId = data['newsId'];
+
+        print("📲 Переход на экран: $screen с newsId: $newsId");
+
+        _navigatorKey!.currentState!.pushNamed(
+          screen,
+          arguments: {'newsId': newsId},
+        );
+      } catch (e) {
+        print("❌ Ошибка парсинга JSON из payload: $e");
+      }
     }
   }
 }

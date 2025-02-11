@@ -32,7 +32,7 @@ void main() async {
   );
 
   setupLocator();
-  FirebaseMessagingService().initNotifications();
+  FirebaseMessagingService().init(navigatorKey);
   NotificationService().init(navigatorKey);
   runApp(MyApp(navigatorKey: navigatorKey));
 }
