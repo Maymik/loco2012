@@ -1,22 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../navigation/app_router.dart';
+import '../navigation/app_router.gr.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
-
   factory NotificationService() => _instance;
-
   NotificationService._internal();
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  GlobalKey<NavigatorState>? _navigatorKey;
+  AppRouter? _router;
+  String? _pendingPayload;
 
-  GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
+  Future<void> init(AppRouter router) async {
+    _router = router;
+    print("📌 Полученный AppRouter: ${_router?.hashCode}");
 
-  Future<void> init(GlobalKey<NavigatorState> navigatorKey) async {
-    _navigatorKey = navigatorKey;
+    if (_pendingPayload != null) {
+      print("🚀 Обрабатываем отложенный payload: $_pendingPayload");
+      _handleNotificationClick(_pendingPayload);
+      _pendingPayload = null;
+    }
 
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -28,7 +34,7 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.initialize(
       settings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print("🔔 Foreground notification clicked: ${response.payload}");
+        print("🔔 Уведомление кликнуто: ${response.payload}");
         _handleNotificationClick(response.payload);
       },
       onDidReceiveBackgroundNotificationResponse: backgroundNotificationHandler,
@@ -38,18 +44,42 @@ class NotificationService {
         .getNotificationAppLaunchDetails();
     if (details?.didNotificationLaunchApp ?? false) {
       print(
-          "🚀 App launched from notification! Payload: ${details!.notificationResponse?.payload}");
+          "🚀 Приложение запущено через уведомление! Payload: ${details!.notificationResponse?.payload}");
       _handleNotificationClick(details.notificationResponse?.payload);
     }
   }
 
   void _handleNotificationClick(String? payload) {
-    if (payload != null && _navigatorKey?.currentState != null) {
-      print('✅ Navigating to /newsDetail with payload: $payload');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _navigatorKey!.currentState!
-            .pushNamed('/newsDetail', arguments: payload);
-      });
+    if (payload == null) {
+      print("❌ Payload == null");
+      return;
+    }
+
+    if (_router == null) {
+      print("🔄 Роутер еще не инициализирован, сохраняем payload: $payload");
+      _pendingPayload = payload;
+      return;
+    }
+
+    print("📌 Переход на экран детали новости с ID: $payload");
+    try {
+      print("📌 Навигационный стек перед push: ${_router!.stack}");
+      print("📌 Навигационный стек перед push: $_router");
+      // if (_router!.navigatorKey.currentState?.mounted ?? false) {
+      //   _router!.replace(NewsDetailRoute(newsId: payload));
+      // } else {
+      //   print("⏳ Навигация отложена, приложение еще не готово.");
+      //   _pendingPayload = payload;
+      // }
+      // _router!.navigateNamed('/newsDetail/$payload');
+
+      _router!.push(
+        const NewsRoute(),
+      );
+      print("✅ Навигационный стек после push: ${_router!.stack}");
+      print("✅ Навигация отправлена в AutoRouter");
+    } catch (e) {
+      print("❌ Ошибка при переходе: $e");
     }
   }
 
@@ -63,14 +93,13 @@ class NotificationService {
       playSound: true,
     );
 
-    const NotificationDetails details = NotificationDetails(
-      android: androidDetails,
-    );
+    const NotificationDetails details =
+        NotificationDetails(android: androidDetails);
 
     await _flutterLocalNotificationsPlugin.show(
       0,
-      'Нова новина!',
-      'Перегляньте деталі новини.',
+      'Новая новость!',
+      'Посмотрите детали новости.',
       details,
       payload: newsId,
     );
@@ -79,5 +108,5 @@ class NotificationService {
 
 @pragma('vm:entry-point')
 void backgroundNotificationHandler(NotificationResponse response) {
-  print("🛑 Background notification clicked: ${response.payload}");
+  print("🛑 Уведомление кликнуто в фоне: ${response.payload}");
 }

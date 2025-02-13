@@ -2,14 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loco_2012/utils/firebase_messaging_service.dart';
 import 'package:loco_2012/utils/notification_service.dart';
 import 'package:loco_2012/utils/service_locator.dart';
 
 import 'features/coaches/cubit/coaches_cubit.dart';
 import 'features/coaches/ui/coaches_screen.dart';
 import 'features/news/cubit/news_cubit.dart';
-import 'features/news/ui/news_detail.dart';
 import 'features/news/ui/news_screen.dart';
 import 'features/phone_auth/cubit/phone_auth_cubit.dart';
 import 'features/phone_auth/ui/phone_auth_screen.dart';
@@ -20,31 +18,36 @@ import 'features/team_composition/ui/team_composition_screen.dart';
 import 'features/tournaments/cubit/tournaments_cubit.dart';
 import 'features/tournaments/ui/tournaments_screen.dart';
 import 'firebase_options.dart';
+import 'navigation/app_router.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 import 'widgets/custom_circular_indicator.dart';
 
 void main() async {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   setupLocator();
+
+  final appRouter = AppRouter();
+
+  NotificationService().init(appRouter);
+  print("🚀 AppRouter передан в NotificationService: ${appRouter.hashCode}");
+
+  runApp(MyApp(appRouter: appRouter));
   FirebaseMessagingService().init(navigatorKey);
   NotificationService().init(navigatorKey);
   runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class MyApp extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
+  final AppRouter appRouter;
 
-  const MyApp({super.key, required this.navigatorKey});
+  const MyApp({super.key, required this.appRouter});
 
   @override
   Widget build(BuildContext context) {
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => PhoneAuthCubit()),
@@ -55,22 +58,13 @@ class MyApp extends StatelessWidget {
             create: (_) => TeamCompositionCubit()..subscribeTeamComposition()),
         BlocProvider(create: (_) => ScheduleCubit()..subscribeToSchedule()),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Loko2012',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        navigatorKey: navigatorKey,
-        onGenerateRoute: (settings) {
-          if (settings.name == '/newsDetail') {
-            final String newsId = settings.arguments as String;
-            return MaterialPageRoute(
-              builder: (context) => NewsDetailScreen(newsId: newsId),
-            );
-          }
-          return null;
-        },
+        routerConfig: appRouter.config(),
         builder: (context, child) {
           return Overlay(
             initialEntries: [
@@ -95,7 +89,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MainContent extends StatefulWidget {
-  const MainContent({super.key});
+
+  const MainContent({
+    super.key,
+  });
 
   @override
   MainContentState createState() => MainContentState();
@@ -136,25 +133,12 @@ class MainContentState extends State<MainContent> {
                   _currentIndex = index;
                 });
               },
-              children: [
-                Navigator(
-                  key: NotificationService().navigatorKey,
-                  onGenerateRoute: (settings) {
-                    if (settings.name == '/newsDetail') {
-                      final String newsId = settings.arguments as String;
-                      return MaterialPageRoute(
-                        builder: (context) => NewsDetailScreen(newsId: newsId),
-                      );
-                    }
-                    return MaterialPageRoute(
-                      builder: (context) => const NewsScreen(),
-                    );
-                  },
-                ),
-                const ScheduleScreen(),
-                const TeamCompositionScreen(),
-                const CoachesScreen(),
-                const TournamentsScreen(),
+              children: const [
+                NewsScreen(),
+                ScheduleScreen(),
+                TeamCompositionScreen(),
+                CoachesScreen(),
+                TournamentsScreen(),
               ],
             ),
       bottomNavigationBar: CustomBottomNavigationBar(
