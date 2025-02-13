@@ -36,6 +36,9 @@ void main() async {
   print("🚀 AppRouter передан в NotificationService: ${appRouter.hashCode}");
 
   runApp(MyApp(appRouter: appRouter));
+  FirebaseMessagingService().init(navigatorKey);
+  NotificationService().init(navigatorKey);
+  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class MyApp extends StatelessWidget {

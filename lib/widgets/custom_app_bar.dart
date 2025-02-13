@@ -37,64 +37,39 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        Builder(
-          builder: (context) => PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'Instagram') {
-                _launchURL('https://www.instagram.com/lokomotyv.ua/');
-              } else if (value == 'Facebook') {
-                _launchURL('https://www.facebook.com/lokomotyv2012/');
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'Instagram',
-                child: Text('Ми в Instagram'),
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'Instagram') {
+              _launchURL('https://www.instagram.com/lokomotyv.ua/');
+            } else if (value == 'Facebook') {
+              _launchURL('https://www.facebook.com/lokomotyv2012/');
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'Instagram',
+              child: Row(
+                children: [
+                  Icon(Icons.camera_alt, color: Colors.purple),
+                  SizedBox(width: 10),
+                  Text('Ми в Instagram'),
+                ],
               ),
-              const PopupMenuItem(
-                value: 'Facebook',
-                child: Text('Ми в Facebook'),
+            ),
+            const PopupMenuItem(
+              value: 'Facebook',
+              child: Row(
+                children: [
+                  Icon(Icons.facebook, color: Colors.blue),
+                  SizedBox(width: 10),
+                  Text('Ми в Facebook'),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
-
-    //   AppBar(
-    //   automaticallyImplyLeading: false,
-    //   centerTitle: true,
-    //   backgroundColor: backgroundColor,
-    //   title: Text(
-    //     title,
-    //     style: TextStyle(
-    //       color: titleColor,
-    //       fontSize: 40,
-    //       fontWeight: FontWeight.w600,
-    //     ),
-    //   ),
-    //   actions: [
-    //     PopupMenuButton<String>(
-    //       onSelected: (value) {
-    //         if (value == 'Instagram') {
-    //           _launchURL('https://www.instagram.com/lokomotyv.ua/');
-    //         } else if (value == 'Facebook') {
-    //           _launchURL('https://www.facebook.com/lokomotyv2012/');
-    //         }
-    //       },
-    //       itemBuilder: (context) => [
-    //         const PopupMenuItem(
-    //           value: 'Instagram',
-    //           child: Text('Ми в Instagram'),
-    //         ),
-    //         const PopupMenuItem(
-    //           value: 'Facebook',
-    //           child: Text('Ми в Facebook'),
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // );
   }
 
   @override
