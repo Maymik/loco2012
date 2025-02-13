@@ -10,7 +10,9 @@ import '../cubit/news_state.dart';
 class NewsDetailScreen extends StatelessWidget {
   final String newsId;
 
-  const NewsDetailScreen({super.key, required this.newsId});
+  // const NewsDetailScreen({super.key, required this.newsId});
+  const NewsDetailScreen(
+      {@PathParam('newsId') required this.newsId, super.key});
 
   @override
   Widget build(BuildContext context) {

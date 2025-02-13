@@ -31,12 +31,15 @@ abstract class $AppRouter extends _i7.RootStackRouter {
       );
     },
     NewsDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<NewsDetailRouteArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<NewsDetailRouteArgs>(
+          orElse: () =>
+              NewsDetailRouteArgs(newsId: pathParams.getString('newsId')));
       return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i2.NewsDetailScreen(
-          key: args.key,
           newsId: args.newsId,
+          key: args.key,
         ),
       );
     },
@@ -85,15 +88,16 @@ class CoachesRoute extends _i7.PageRouteInfo<void> {
 /// [_i2.NewsDetailScreen]
 class NewsDetailRoute extends _i7.PageRouteInfo<NewsDetailRouteArgs> {
   NewsDetailRoute({
-    _i8.Key? key,
     required String newsId,
+    _i8.Key? key,
     List<_i7.PageRouteInfo>? children,
   }) : super(
           NewsDetailRoute.name,
           args: NewsDetailRouteArgs(
-            key: key,
             newsId: newsId,
+            key: key,
           ),
+          rawPathParams: {'newsId': newsId},
           initialChildren: children,
         );
 
@@ -105,17 +109,17 @@ class NewsDetailRoute extends _i7.PageRouteInfo<NewsDetailRouteArgs> {
 
 class NewsDetailRouteArgs {
   const NewsDetailRouteArgs({
-    this.key,
     required this.newsId,
+    this.key,
   });
-
-  final _i8.Key? key;
 
   final String newsId;
 
+  final _i8.Key? key;
+
   @override
   String toString() {
-    return 'NewsDetailRouteArgs{key: $key, newsId: $newsId}';
+    return 'NewsDetailRouteArgs{newsId: $newsId, key: $key}';
   }
 }
 

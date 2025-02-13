@@ -1,96 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-//
-// import '../features/news/ui/news_detail.dart';
-//
-// class NotificationService {
-//   static final NotificationService _instance = NotificationService._internal();
-//
-//   factory NotificationService() => _instance;
-//
-//   NotificationService._internal();
-//
-//   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-//   FlutterLocalNotificationsPlugin();
-//
-//   GlobalKey<NavigatorState>? _navigatorKey;
-//
-//   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
-//
-//   Future<void> init(GlobalKey<NavigatorState> navigatorKey) async {
-//     _navigatorKey = navigatorKey;
-//     print("📌 navigatorKey передан в NotificationService: ${_navigatorKey!.hashCode}");
-//
-//     const AndroidInitializationSettings androidSettings =
-//     AndroidInitializationSettings('@mipmap/ic_launcher');
-//
-//     const InitializationSettings settings = InitializationSettings(
-//       android: androidSettings,
-//     );
-//
-//     await _flutterLocalNotificationsPlugin.initialize(
-//       settings,
-//       onDidReceiveNotificationResponse: (NotificationResponse response) {
-//         print("🔔 Foreground notification clicked: ${response.payload}");
-//         _handleNotificationClick(response.payload);
-//       },
-//       onDidReceiveBackgroundNotificationResponse: backgroundNotificationHandler,
-//     );
-//
-//     final details = await _flutterLocalNotificationsPlugin
-//         .getNotificationAppLaunchDetails();
-//     if (details?.didNotificationLaunchApp ?? false) {
-//       print("🚀 App launched from notification! Payload: ${details!.notificationResponse?.payload}");
-//       _handleNotificationClick(details.notificationResponse?.payload);
-//     }
-//   }
-//
-//   void _handleNotificationClick(String? payload) {
-//     if (_navigatorKey == null || payload == null) {
-//       print("❌ navigatorKey или payload == null");
-//       return;
-//     }
-//
-//     print("📌 navigatorKey в момент клика: ${_navigatorKey!.hashCode}");
-//     Future.delayed(const Duration(seconds: 2), () {
-//       print("📌 navigatorKey.currentState: ${_navigatorKey!.currentState}");
-//       if (_navigatorKey!.currentState != null) {
-//         _navigatorKey!.currentState!.pushNamed('/newsDetail', arguments: payload);
-//       } else {
-//         print("❌ navigatorKey!.currentState все еще null");
-//       }
-//     });
-//   }
-//
-//   Future<void> showNotification({required String newsId}) async {
-//     const AndroidNotificationDetails androidDetails =
-//     AndroidNotificationDetails(
-//       'new_channel',
-//       'New Channel Notifications',
-//       importance: Importance.max,
-//       priority: Priority.high,
-//       playSound: true,
-//     );
-//
-//     const NotificationDetails details = NotificationDetails(
-//       android: androidDetails,
-//     );
-//
-//     await _flutterLocalNotificationsPlugin.show(
-//       0,
-//       'Нова новина!',
-//       'Перегляньте деталі новини.',
-//       details,
-//       payload: newsId,
-//     );
-//   }
-// }
-//
-// @pragma('vm:entry-point')
-// void backgroundNotificationHandler(NotificationResponse response) {
-//   print("🛑 Background notification clicked: ${response.payload}");
-// }
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../navigation/app_router.dart';
@@ -98,18 +5,24 @@ import '../navigation/app_router.gr.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
-
   factory NotificationService() => _instance;
-
   NotificationService._internal();
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  late AppRouter _router;
+  AppRouter? _router;
+  String? _pendingPayload;
 
   Future<void> init(AppRouter router) async {
     _router = router;
+    print("📌 Полученный AppRouter: ${_router?.hashCode}");
+
+    if (_pendingPayload != null) {
+      print("🚀 Обрабатываем отложенный payload: $_pendingPayload");
+      _handleNotificationClick(_pendingPayload);
+      _pendingPayload = null;
+    }
 
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -142,8 +55,32 @@ class NotificationService {
       return;
     }
 
+    if (_router == null) {
+      print("🔄 Роутер еще не инициализирован, сохраняем payload: $payload");
+      _pendingPayload = payload;
+      return;
+    }
+
     print("📌 Переход на экран детали новости с ID: $payload");
-    _router.push(NewsDetailRoute(newsId: payload));
+    try {
+      print("📌 Навигационный стек перед push: ${_router!.stack}");
+      print("📌 Навигационный стек перед push: $_router");
+      // if (_router!.navigatorKey.currentState?.mounted ?? false) {
+      //   _router!.replace(NewsDetailRoute(newsId: payload));
+      // } else {
+      //   print("⏳ Навигация отложена, приложение еще не готово.");
+      //   _pendingPayload = payload;
+      // }
+      // _router!.navigateNamed('/newsDetail/$payload');
+
+      _router!.push(
+        const NewsRoute(),
+      );
+      print("✅ Навигационный стек после push: ${_router!.stack}");
+      print("✅ Навигация отправлена в AutoRouter");
+    } catch (e) {
+      print("❌ Ошибка при переходе: $e");
+    }
   }
 
   Future<void> showNotification({required String newsId}) async {
@@ -156,14 +93,13 @@ class NotificationService {
       playSound: true,
     );
 
-    const NotificationDetails details = NotificationDetails(
-      android: androidDetails,
-    );
+    const NotificationDetails details =
+        NotificationDetails(android: androidDetails);
 
     await _flutterLocalNotificationsPlugin.show(
       0,
-      'Нова новина!',
-      'Перегляньте деталі новини.',
+      'Новая новость!',
+      'Посмотрите детали новости.',
       details,
       payload: newsId,
     );
