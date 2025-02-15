@@ -1,13 +1,13 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../navigation/app_router.gr.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_circular_indicator.dart';
 import '../cubit/news_cubit.dart';
 import '../cubit/news_state.dart';
-import 'news_detail.dart';
 
 @RoutePage(name: 'NewsRoute')
 class NewsScreen extends StatelessWidget {
@@ -33,15 +33,10 @@ class NewsScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ListTile(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              NewsDetailScreen(newsId: news.id),
-                        ),
-                      );
+                      context.pushRoute(NewsDetailRoute(newsId: news.id));
                     },
-                    leading: const Icon(Icons.person, color: Colors.blue),
+                    leading:
+                        const Icon(Icons.newspaper_rounded, color: Colors.blue),
                     title: Text(news.news.split('.').first,
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
