@@ -65,16 +65,8 @@ class NotificationService {
     try {
       print("📌 Навигационный стек перед push: ${_router!.stack}");
       print("📌 Навигационный стек перед push: $_router");
-      // if (_router!.navigatorKey.currentState?.mounted ?? false) {
-      //   _router!.replace(NewsDetailRoute(newsId: payload));
-      // } else {
-      //   print("⏳ Навигация отложена, приложение еще не готово.");
-      //   _pendingPayload = payload;
-      // }
-      // _router!.navigateNamed('/newsDetail/$payload');
-
       _router!.push(
-        const NewsRoute(),
+        NewsDetailRoute(newsId: payload),
       );
       print("✅ Навигационный стек после push: ${_router!.stack}");
       print("✅ Навигация отправлена в AutoRouter");
