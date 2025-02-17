@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loco_2012/utils/firebase_messaging_service.dart';
 import 'package:loco_2012/utils/notification_service.dart';
 import 'package:loco_2012/utils/service_locator.dart';
 
@@ -22,7 +23,7 @@ void main() async {
   setupLocator();
 
   final appRouter = AppRouter();
-
+  PushNotificationService().init(appRouter);
   NotificationService().init(appRouter);
   print("🚀 AppRouter передан в NotificationService: ${appRouter.hashCode}");
 

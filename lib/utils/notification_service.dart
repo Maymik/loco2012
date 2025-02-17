@@ -64,7 +64,6 @@ class NotificationService {
     print("📌 Переход на экран детали новости с ID: $payload");
     try {
       print("📌 Навигационный стек перед push: ${_router!.stack}");
-      print("📌 Навигационный стек перед push: $_router");
       _router!.push(
         NewsDetailRoute(newsId: payload),
       );

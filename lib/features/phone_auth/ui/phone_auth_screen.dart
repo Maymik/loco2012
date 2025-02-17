@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loco_2012/widgets/custom_circular_indicator.dart';
 
+import '../../../navigation/app_router.gr.dart';
 import '../cubit/phone_auth_cubit.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
@@ -33,7 +35,7 @@ class PhoneAuthScreenState extends State<PhoneAuthScreen> {
           if (state is PhoneAuthCodeSent) {
             _verificationId = state.verificationId;
           } else if (state is PhoneAuthSuccess) {
-            Navigator.pushReplacementNamed(context, '/news');
+            context.pushRoute(const AuthGuardRoute());
           } else if (state is PhoneAuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
