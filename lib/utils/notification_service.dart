@@ -16,10 +16,8 @@ class NotificationService {
 
   Future<void> init(AppRouter router) async {
     _router = router;
-    print("📌 Полученный AppRouter: ${_router?.hashCode}");
 
     if (_pendingPayload != null) {
-      print("🚀 Обрабатываем отложенный payload: $_pendingPayload");
       _handleNotificationClick(_pendingPayload);
       _pendingPayload = null;
     }
@@ -34,7 +32,6 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.initialize(
       settings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print("🔔 Уведомление кликнуто: ${response.payload}");
         _handleNotificationClick(response.payload);
       },
       onDidReceiveBackgroundNotificationResponse: backgroundNotificationHandler,
@@ -51,24 +48,18 @@ class NotificationService {
 
   void _handleNotificationClick(String? payload) {
     if (payload == null) {
-      print("❌ Payload == null");
       return;
     }
 
     if (_router == null) {
-      print("🔄 Роутер еще не инициализирован, сохраняем payload: $payload");
       _pendingPayload = payload;
       return;
     }
 
-    print("📌 Переход на экран детали новости с ID: $payload");
     try {
-      print("📌 Навигационный стек перед push: ${_router!.stack}");
       _router!.push(
         NewsDetailRoute(newsId: payload),
       );
-      print("✅ Навигационный стек после push: ${_router!.stack}");
-      print("✅ Навигация отправлена в AutoRouter");
     } catch (e) {
       print("❌ Ошибка при переходе: $e");
     }

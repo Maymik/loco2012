@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../repositories/team_composition_repository.dart';
 import '../../../utils/service_locator.dart';
 import 'team_composition_state.dart';
@@ -17,13 +18,12 @@ class TeamCompositionCubit extends Cubit<TeamCompositionState> {
           emit(TeamCompositionState.loaded(teamList));
         },
         onError: (e, stackTrace) {
-          emit(TeamCompositionState.error('Помилка завантаження: ${e.toString()}'));
-          print('Помилка в TeamCompositionCubit: $e\n$stackTrace');
+          emit(TeamCompositionState.error(
+              'Помилка завантаження: $e\n$stackTrace'));
         },
       );
     } catch (e, stackTrace) {
-      emit(TeamCompositionState.error('Критична помилка: ${e.toString()}'));
-      print('Критична помилка в subscribeTeamComposition: $e\n$stackTrace');
+      emit(TeamCompositionState.error('Критична помилка: $e\n$stackTrace'));
     }
   }
 }
