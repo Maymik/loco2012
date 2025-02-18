@@ -25,8 +25,6 @@ void main() async {
   final appRouter = AppRouter();
   PushNotificationService().init(appRouter);
   NotificationService().init(appRouter);
-  print("🚀 AppRouter передан в NotificationService: ${appRouter.hashCode}");
-
   runApp(MyApp(appRouter: appRouter));
 }
 

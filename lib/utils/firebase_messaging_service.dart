@@ -20,7 +20,6 @@ class PushNotificationService {
 
   Future<void> init(AppRouter router) async {
     _router = router;
-    print("📌 Полученный AppRouter: \${_router?.hashCode}");
 
     await _requestPermissions();
     await _setupLocalNotifications();
@@ -33,7 +32,6 @@ class PushNotificationService {
       badge: true,
       sound: true,
     );
-    print("🔔 Разрешения на уведомления: \${settings.authorizationStatus}");
   }
 
   Future<void> _setupLocalNotifications() async {
@@ -47,7 +45,6 @@ class PushNotificationService {
     await _flutterLocalNotificationsPlugin.initialize(
       settings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print("🔔 Локальное уведомление кликнуто: \${response.payload}");
         _handleNotificationClick(response.payload);
       },
     );
@@ -55,12 +52,10 @@ class PushNotificationService {
 
   Future<void> _setupFCM() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("📩 Получено push-уведомление: \${message.data}");
       _showNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("🚀 Приложение открыто через уведомление: \${message.data}");
       _handleNotificationClick(message.data['newsId']);
     });
 
@@ -68,7 +63,6 @@ class PushNotificationService {
         .getInitialMessage()
         .then((RemoteMessage? message) {
       if (message != null) {
-        print("🚀 Приложение запущено через уведомление: \${message.data}");
         _handleNotificationClick(message.data['newsId']);
       }
     });
@@ -76,20 +70,16 @@ class PushNotificationService {
 
   void _handleNotificationClick(String? payload) {
     if (payload == null) {
-      print("❌ Payload == null");
       return;
     }
 
     if (_router == null) {
-      print("🔄 Роутер еще не инициализирован, сохраняем payload: \$payload");
       _pendingPayload = payload;
       return;
     }
 
-    print("📌 Переход на экран детали новости с ID: \$payload");
     try {
       _router!.push(NewsDetailRoute(newsId: payload));
-      print("✅ Навигация отправлена в AutoRouter");
     } catch (e) {
       print("❌ Ошибка при переходе: \$e");
     }
