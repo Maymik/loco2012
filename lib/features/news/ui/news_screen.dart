@@ -47,6 +47,13 @@ class NewsScreen extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.pushRoute(const CreateNewsRoute());
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 }

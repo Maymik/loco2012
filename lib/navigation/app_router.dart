@@ -21,5 +21,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: ScheduleRoute.page),
         AutoRoute(page: TeamCompositionRoute.page),
         AutoRoute(page: TournamentsRoute.page),
-  ];
+        AutoRoute(page: CreateNewsRoute.page),
+      ];
 }
