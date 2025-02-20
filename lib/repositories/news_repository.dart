@@ -35,7 +35,7 @@ class NewsRepository {
         return null;
       }
     } catch (e) {
-      print('Ошибка при получении новости по ID: $e');
+      print('Помилка при отриманні новини по ID: $e');
       return null;
     }
   }
@@ -44,8 +44,8 @@ class NewsRepository {
     try {
       await _firestore.collection('news').add(news.toJson());
     } catch (e) {
-      print('Ошибка при создании новости: $e');
-      throw Exception('Не удалось создать новость');
+      print('Помилка при створені новини: $e');
+      throw Exception('Не вийшло створити новину');
     }
   }
 }

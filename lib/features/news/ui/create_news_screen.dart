@@ -30,8 +30,7 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
         author: _authorController.text,
         title: _titleController.text,
         id: '',
-        // Firestore генерирует ID
-        images: [], // Пока без загрузки изображений
+        images: [],
       );
 
       try {
