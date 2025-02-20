@@ -39,4 +39,13 @@ class NewsRepository {
       return null;
     }
   }
+
+  Future<void> createNews(NewsModel news) async {
+    try {
+      await _firestore.collection('news').add(news.toJson());
+    } catch (e) {
+      print('Ошибка при создании новости: $e');
+      throw Exception('Не удалось создать новость');
+    }
+  }
 }
