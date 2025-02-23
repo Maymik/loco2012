@@ -77,8 +77,8 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
           "Нова новина",
           style: TextStyle(
             color: Colors.green,
-            fontSize: 32,
-            fontWeight: FontWeight.w400,
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -89,11 +89,14 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(labelText: 'Заголовок'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Введіть заголовок' : null,
+                Card(
+                  //  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: _titleController,
+                    decoration: const InputDecoration(labelText: 'Заголовок'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Введіть заголовок' : null,
+                  ),
                 ),
                 TextFormField(
                   controller: _authorController,

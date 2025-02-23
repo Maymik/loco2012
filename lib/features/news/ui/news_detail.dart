@@ -29,12 +29,11 @@ class NewsDetailScreen extends StatelessWidget {
           backgroundColor: Colors.red,
           title: const Text(
             "Деталі новини",
-            style: TextStyle(
-              color: Colors.green,
-              fontSize: 32,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 40,
+                fontWeight: FontWeight.w600,
+              )),
         ),
         body: BlocBuilder<NewsDetailCubit, NewsState>(
           builder: (context, state) {
