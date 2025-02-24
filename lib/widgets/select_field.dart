@@ -31,7 +31,7 @@ class SelectField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 84,
+        height: 54,
         width: double.infinity,
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(

@@ -77,8 +77,8 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
           "Нова новина",
           style: TextStyle(
             color: Colors.green,
-            fontSize: 32,
-            fontWeight: FontWeight.w400,
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -89,48 +89,97 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(labelText: 'Заголовок'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Введіть заголовок' : null,
-                ),
-                TextFormField(
-                  controller: _authorController,
-                  decoration: const InputDecoration(labelText: 'Автор'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Введіть автора' : null,
-                ),
-                TextFormField(
-                  controller: _newsController,
-                  decoration: const InputDecoration(labelText: 'Зміст'),
-                  maxLines: 5,
-                  validator: (value) =>
-                      value!.isEmpty ? 'Введіть текст новини' : null,
-                ),
-                TextFormField(
-                  controller: _imageUrlController,
-                  decoration: InputDecoration(
-                    labelText: 'URL зображення',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.image_search),
-                      onPressed: _previewImage,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextFormField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'Заголовок',
+                        border: InputBorder.none,
+                      ),
+                      validator: (value) =>
+                          value!.isEmpty ? 'Введіть заголовок' : null,
                     ),
                   ),
-                  validator: (value) {
-                    if (value!.isNotEmpty &&
-                        !(Uri.tryParse(value)?.hasAbsolutePath ?? false)) {
-                      return 'Некорректний URL';
-                    }
-                    return null;
-                  },
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextFormField(
+                      controller: _authorController,
+                      decoration: const InputDecoration(
+                        labelText: 'Автор',
+                        border: InputBorder.none,
+                      ),
+                      validator: (value) =>
+                          value!.isEmpty ? 'Введіть автора' : null,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextFormField(
+                      controller: _newsController,
+                      decoration: const InputDecoration(
+                        labelText: 'Зміст',
+                        border: InputBorder.none,
+                      ),
+                      maxLines: 3,
+                      validator: (value) =>
+                          value!.isEmpty ? 'Введіть текст новини' : null,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextFormField(
+                      controller: _imageUrlController,
+                      decoration: InputDecoration(
+                        labelText: 'URL зображення',
+                        border: InputBorder.none,
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.image_search),
+                          onPressed: _previewImage,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isNotEmpty &&
+                            !(Uri.tryParse(value)?.hasAbsolutePath ?? false)) {
+                          return 'Некорректний URL';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                 ),
                 if (_imagePreviewUrl != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Image.network(_imagePreviewUrl!),
                   ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 _isLoading
                     ? const CircularProgressIndicator()
                     : SelectField(
