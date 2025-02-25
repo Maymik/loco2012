@@ -4,6 +4,7 @@ import 'package:loco_2012/widgets/select_field.dart';
 import '../../../data/news_model.dart';
 import '../../../repositories/news_repository.dart';
 import '../../../utils/service_locator.dart';
+import '../../../widgets/custom_text_field.dart';
 
 class CreateNewsScreen extends StatefulWidget {
   const CreateNewsScreen({super.key});
@@ -89,90 +90,42 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Заголовок',
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Введіть заголовок' : null,
-                    ),
-                  ),
+                CustomTextFieldContainer(
+                  controller: _titleController,
+                  labelText: 'Заголовок',
+                  validator: (value) =>
+                      value!.isEmpty ? 'Введіть заголовок' : null,
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: TextFormField(
-                      controller: _authorController,
-                      decoration: const InputDecoration(
-                        labelText: 'Автор',
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Введіть автора' : null,
-                    ),
-                  ),
+                CustomTextFieldContainer(
+                  controller: _authorController,
+                  labelText: 'Автор',
+                  validator: (value) =>
+                      value!.isEmpty ? 'Введіть автора' : null,
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: TextFormField(
-                      controller: _newsController,
-                      decoration: const InputDecoration(
-                        labelText: 'Зміст',
-                        border: InputBorder.none,
-                      ),
-                      maxLines: 3,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Введіть текст новини' : null,
-                    ),
-                  ),
+                CustomTextFieldContainer(
+                  controller: _newsController,
+                  labelText: 'Зміст',
+                  maxLines: 3,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Введіть текст новини' : null,
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                CustomTextFieldContainer(
+                  controller: _imageUrlController,
+                  labelText: 'URL зображення',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.image_search),
+                    onPressed: _previewImage,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: TextFormField(
-                      controller: _imageUrlController,
-                      decoration: InputDecoration(
-                        labelText: 'URL зображення',
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.image_search),
-                          onPressed: _previewImage,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isNotEmpty &&
-                            !(Uri.tryParse(value)?.hasAbsolutePath ?? false)) {
-                          return 'Некорректний URL';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
+                  validator: (value) {
+                    if (value!.isNotEmpty &&
+                        !(Uri.tryParse(value)?.hasAbsolutePath ?? false)) {
+                      return 'Некорректний URL';
+                    }
+                    return null;
+                  },
                 ),
                 if (_imagePreviewUrl != null)
                   Padding(
