@@ -23,6 +23,8 @@ dependencies:
   get_it: ^7.6.7
   json_annotation: ^4.8.1
   url_launcher: ^6.1.7
+  image_picker: ^1.0.7
+  firebase_storage: ^11.7.7
 
 dev_dependencies:
   flutter_test:

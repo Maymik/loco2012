@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loco_2012/widgets/select_field.dart';
 
 import '../../../data/news_model.dart';
@@ -22,10 +26,42 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
 
   bool _isLoading = false;
   String? _imagePreviewUrl;
+  File? _selectedImage;
 
-  void _createNews() async {
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _imagePreviewUrl = null;
+      });
+    }
+  }
+
+  void _previewImage() {
+    if (Uri.tryParse(_imageUrlController.text)?.hasAbsolutePath ?? false) {
+      setState(() {
+        _imagePreviewUrl = _imageUrlController.text;
+        _selectedImage = null;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Некорректний URL зображення')),
+      );
+    }
+  }
+
+  Future<void> _createNews() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
+
+      String? imageUrl;
+      if (_selectedImage != null) {
+        imageUrl = await uploadImageToFirebase(_selectedImage!);
+      } else if (_imageUrlController.text.isNotEmpty) {
+        imageUrl = _imageUrlController.text;
+      }
 
       final news = NewsModel(
         time: DateTime.now(),
@@ -33,9 +69,7 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
         author: _authorController.text,
         title: _titleController.text,
         id: '',
-        images: _imageUrlController.text.isNotEmpty
-            ? [_imageUrlController.text]
-            : [],
+        images: imageUrl != null ? [imageUrl] : [],
       );
 
       try {
@@ -48,16 +82,6 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
       } finally {
         setState(() => _isLoading = false);
       }
-    }
-  }
-
-  void _previewImage() {
-    if (Uri.tryParse(_imageUrlController.text)?.hasAbsolutePath ?? false) {
-      setState(() => _imagePreviewUrl = _imageUrlController.text);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Некорректний URL зображення')),
-      );
     }
   }
 
@@ -127,6 +151,17 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
+                ElevatedButton.icon(
+                  onPressed: _pickImage,
+                  icon: const Icon(Icons.photo_library),
+                  label: const Text("Вибрати зображення"),
+                ),
+                if (_selectedImage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Image.file(_selectedImage!),
+                  ),
                 if (_imagePreviewUrl != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -146,5 +181,21 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
         ),
       ),
     );
+  }
+}
+
+Future<String?> uploadImageToFirebase(File imageFile) async {
+  try {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference storageRef =
+        FirebaseStorage.instance.ref().child('news_images/$fileName.jpg');
+    UploadTask uploadTask = storageRef.putFile(imageFile);
+
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  } catch (e) {
+    print("Ошибка загрузки: $e");
+    return null;
   }
 }
