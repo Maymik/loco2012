@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loco_2012/widgets/custom_circular_indicator.dart';
 import 'package:loco_2012/widgets/select_field.dart';
 
 import '../../../data/news_model.dart';
@@ -28,9 +29,8 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
   String? _imagePreviewUrl;
   File? _selectedImage;
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
@@ -152,10 +152,20 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
                   },
                 ),
                 const SizedBox(height: 10),
-                ElevatedButton.icon(
-                  onPressed: _pickImage,
-                  icon: const Icon(Icons.photo_library),
-                  label: const Text("Вибрати зображення"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => _pickImage(ImageSource.gallery),
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text("Галерея"),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () => _pickImage(ImageSource.camera),
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text("Камера"),
+                    ),
+                  ],
                 ),
                 if (_selectedImage != null)
                   Padding(
@@ -169,7 +179,7 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
                   ),
                 const SizedBox(height: 16),
                 _isLoading
-                    ? const CircularProgressIndicator()
+                    ? const FootballLoadingIndicator()
                     : SelectField(
                         onTap: _createNews,
                         text: 'Створити новину',
