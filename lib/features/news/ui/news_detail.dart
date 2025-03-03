@@ -50,7 +50,6 @@ class NewsDetailScreen extends StatelessWidget {
                       if (news.images.isNotEmpty)
                         Center(
                           child: SizedBox(
-                            height: 240,
                             width: double.infinity,
                             child: Image.network(
                               news.images.first,
