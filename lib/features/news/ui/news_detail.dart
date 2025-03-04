@@ -29,11 +29,12 @@ class NewsDetailScreen extends StatelessWidget {
           backgroundColor: Colors.red,
           title: const Text(
             "Деталі новини",
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 40,
-                fontWeight: FontWeight.w600,
-              )),
+            style: TextStyle(
+              color: Colors.green,
+              fontSize: 40,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         body: BlocBuilder<NewsDetailCubit, NewsState>(
           builder: (context, state) {
@@ -48,13 +49,25 @@ class NewsDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (news.images.isNotEmpty)
-                        Center(
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Image.network(
-                              news.images.first,
-                              fit: BoxFit.cover,
-                            ),
+                        SizedBox(
+                          height: 200,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: news.images.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    news.images[index],
+                                    width: 380,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       const SizedBox(height: 16),
