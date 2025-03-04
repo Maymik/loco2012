@@ -1,229 +1,3 @@
-// import 'dart:io';
-//
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:loco_2012/widgets/select_field.dart';
-//
-// import '../../../data/news_model.dart';
-// import '../../../widgets/custom_circular_indicator.dart';
-// import '../../../widgets/custom_text_field.dart';
-// import '../cubit/news_cubit.dart';
-// import '../cubit/news_state.dart';
-//
-// class CreateNewsScreen extends StatelessWidget {
-//   const CreateNewsScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => NewsCubit(),
-//       child: BlocBuilder<NewsCubit, NewsState>(
-//         builder: (context, state) {
-//           return const CreateNewsView();
-//         },
-//       ),
-//
-//     );
-//   }
-// }
-//
-// class CreateNewsView extends StatefulWidget {
-//   const CreateNewsView({super.key});
-//
-//   @override
-//   State<CreateNewsView> createState() => _CreateNewsViewState();
-// }
-//
-// class _CreateNewsViewState extends State<CreateNewsView> {
-//   final _formKey = GlobalKey<FormState>();
-//   final TextEditingController _titleController = TextEditingController();
-//   final TextEditingController _authorController = TextEditingController();
-//   final TextEditingController _newsController = TextEditingController();
-//   final TextEditingController _imageUrlController = TextEditingController();
-//
-//   File? _selectedImage;
-//   String? _imagePreviewUrl;
-//
-//   Future<void> _pickImage(ImageSource source) async {
-//     final pickedFile = await ImagePicker().pickImage(source: source);
-//     if (pickedFile != null) {
-//       setState(() {
-//         _selectedImage = File(pickedFile.path);
-//         _imagePreviewUrl = null;
-//       });
-//     }
-//   }
-//
-//   void _previewImage() {
-//     if (Uri.tryParse(_imageUrlController.text)?.hasAbsolutePath ?? false) {
-//       setState(() {
-//         _imagePreviewUrl = _imageUrlController.text;
-//         _selectedImage = null;
-//       });
-//     } else {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Некорректний URL зображення')),
-//       );
-//     }
-//   }
-//
-//   Future<void> _createNews(BuildContext context) async {
-//     if (_formKey.currentState?.validate() ?? false) {
-//       String? imageUrl;
-//       if (_selectedImage != null) {
-//         imageUrl = await uploadImageToFirebase(_selectedImage!);
-//       } else if (_imageUrlController.text.isNotEmpty) {
-//         imageUrl = _imageUrlController.text;
-//       }
-//
-//       final news = NewsModel(
-//         time: DateTime.now(),
-//         news: _newsController.text,
-//         author: _authorController.text,
-//         title: _titleController.text,
-//         id: '',
-//         images: imageUrl != null ? [imageUrl] : [],
-//       );
-//
-//       context.read<NewsCubit>().createNews(news);
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         backgroundColor: Colors.green,
-//         appBar: AppBar(
-//           automaticallyImplyLeading: false,
-//           centerTitle: true,
-//           leading: IconButton(
-//             color: Colors.green,
-//             icon: const Icon(Icons.arrow_back),
-//             onPressed: () => Navigator.pop(context),
-//           ),
-//           backgroundColor: Colors.red,
-//           title: const Text(
-//             "Нова новина",
-//             style: TextStyle(
-//               color: Colors.green,
-//               fontSize: 40,
-//               fontWeight: FontWeight.w600,
-//             ),
-//           ),
-//         ),
-//         body: BlocBuilder<NewsCubit, NewsState>(builder: (context, state) {
-//           return state.when(
-//             initial: () => const Center(child: SizedBox.shrink()),
-//             loading: () => const Center(child: FootballLoadingIndicator()),
-//             loaded: (newsList) {
-//               return Padding(
-//                 padding: const EdgeInsets.all(16.0),
-//                 child: Form(
-//                   key: _formKey,
-//                   child: SingleChildScrollView(
-//                     child: Column(
-//                       children: [
-//                         CustomTextFieldContainer(
-//                           controller: _titleController,
-//                           labelText: 'Заголовок',
-//                           validator: (value) =>
-//                               value!.isEmpty ? 'Введіть заголовок' : null,
-//                         ),
-//                         const SizedBox(height: 16),
-//                         CustomTextFieldContainer(
-//                           controller: _authorController,
-//                           labelText: 'Автор',
-//                           validator: (value) =>
-//                               value!.isEmpty ? 'Введіть автора' : null,
-//                         ),
-//                         const SizedBox(height: 16),
-//                         CustomTextFieldContainer(
-//                           controller: _newsController,
-//                           labelText: 'Зміст',
-//                           maxLines: 3,
-//                           validator: (value) =>
-//                               value!.isEmpty ? 'Введіть текст новини' : null,
-//                         ),
-//                         const SizedBox(height: 16),
-//                         CustomTextFieldContainer(
-//                           controller: _imageUrlController,
-//                           labelText: 'URL зображення',
-//                           suffixIcon: IconButton(
-//                             icon: const Icon(Icons.image_search),
-//                             onPressed: _previewImage,
-//                           ),
-//                           validator: (value) {
-//                             if (value!.isNotEmpty &&
-//                                 !(Uri.tryParse(value)?.hasAbsolutePath ??
-//                                     false)) {
-//                               return 'Некорректний URL';
-//                             }
-//                             return null;
-//                           },
-//                         ),
-//                         const SizedBox(height: 10),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                           children: [
-//                             ElevatedButton.icon(
-//                               onPressed: () => _pickImage(ImageSource.gallery),
-//                               icon: const Icon(Icons.photo_library),
-//                               label: const Text("Галерея"),
-//                             ),
-//                             ElevatedButton.icon(
-//                               onPressed: () => _pickImage(ImageSource.camera),
-//                               icon: const Icon(Icons.camera_alt),
-//                               label: const Text("Камера"),
-//                             ),
-//                           ],
-//                         ),
-//                         if (_selectedImage != null)
-//                           Padding(
-//                             padding: const EdgeInsets.symmetric(vertical: 10),
-//                             child: Image.file(_selectedImage!),
-//                           ),
-//                         if (_imagePreviewUrl != null)
-//                           Padding(
-//                             padding: const EdgeInsets.symmetric(vertical: 10),
-//                             child: Image.network(_imagePreviewUrl!),
-//                           ),
-//                         const SizedBox(height: 16),
-//                         SelectField(  onTap: () async {
-//                           await _createNews(context);
-//                           Navigator.pop(context);
-//                         },
-//                           text: 'Створити новину',
-//                           backgroundColor: Colors.red,
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               );
-//             },
-//             error: (message) => Center(child: Text(message)),
-//           );
-//         }));
-//   }
-// }
-//
-// Future<String?> uploadImageToFirebase(File imageFile) async {
-//   try {
-//     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-//     Reference storageRef =
-//         FirebaseStorage.instance.ref().child('news_images/$fileName.jpg');
-//     UploadTask uploadTask = storageRef.putFile(imageFile);
-//
-//     TaskSnapshot snapshot = await uploadTask;
-//     String downloadUrl = await snapshot.ref.getDownloadURL();
-//     return downloadUrl;
-//   } catch (e) {
-//     print("Ошибка загрузки: $e");
-//     return null;
-//   }
-// }
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -264,25 +38,35 @@ class _CreateNewsViewState extends State<CreateNewsView> {
   final TextEditingController _newsController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
 
-  File? _selectedImage;
-  String? _imagePreviewUrl;
+  List<File> _selectedImages = [];
+  List<String> _imageUrls = [];
   bool _isLoading = false;
 
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
+  Future<void> _pickImageFromCamera() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
-        _imagePreviewUrl = null;
+        _selectedImages.add(File(pickedFile.path));
       });
     }
   }
 
-  void _previewImage() {
-    if (Uri.tryParse(_imageUrlController.text)?.hasAbsolutePath ?? false) {
+  Future<void> _pickImagesFromGallery() async {
+    final pickedFiles = await ImagePicker().pickMultiImage();
+    if (pickedFiles.isNotEmpty) {
       setState(() {
-        _imagePreviewUrl = _imageUrlController.text;
-        _selectedImage = null;
+        _selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
+      });
+    }
+  }
+
+  void _addImageUrl() {
+    final url = _imageUrlController.text.trim();
+    if (Uri.tryParse(url)?.hasAbsolutePath ?? false) {
+      setState(() {
+        _imageUrls.add(url);
+        _imageUrlController.clear();
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -291,18 +75,23 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     }
   }
 
+  Future<List<String>> _uploadImages() async {
+    List<String> uploadedUrls = [];
+    for (var image in _selectedImages) {
+      final url = await uploadImageToFirebase(image);
+      if (url != null) {
+        uploadedUrls.add(url);
+      }
+    }
+    return uploadedUrls;
+  }
+
   Future<void> _createNews(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
 
-      String? imageUrl;
-      if (_selectedImage != null) {
-        imageUrl = await uploadImageToFirebase(_selectedImage!);
-      } else if (_imageUrlController.text.isNotEmpty) {
-        imageUrl = _imageUrlController.text;
-      }
+      List<String> uploadedImages = await _uploadImages();
+      final newsImages = [..._imageUrls, ...uploadedImages];
 
       final news = NewsModel(
         time: DateTime.now(),
@@ -310,15 +99,11 @@ class _CreateNewsViewState extends State<CreateNewsView> {
         author: _authorController.text,
         title: _titleController.text,
         id: '',
-        images: imageUrl != null ? [imageUrl] : [],
+        images: newsImages,
       );
 
       await context.read<NewsCubit>().createNews(news);
-
-      setState(() {
-        _isLoading = false;
-      });
-
+      setState(() => _isLoading = false);
       Navigator.pop(context);
     }
   }
@@ -328,22 +113,12 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        leading: IconButton(
-          color: Colors.green,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: const Text("Нова новина",
+            style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.w600,
+                color: Colors.green)),
         backgroundColor: Colors.red,
-        title: const Text(
-          "Нова новина",
-          style: TextStyle(
-            color: Colors.green,
-            fontSize: 40,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ),
       body: BlocBuilder<NewsCubit, NewsState>(
         builder: (context, state) {
@@ -378,48 +153,66 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                 value!.isEmpty ? 'Введіть текст новини' : null,
                           ),
                           const SizedBox(height: 16),
-                          CustomTextFieldContainer(
-                            controller: _imageUrlController,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomTextFieldContainer(
+                                  controller: _imageUrlController,
                             labelText: 'URL зображення',
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.image_search),
-                              onPressed: _previewImage,
-                            ),
-                            validator: (value) {
-                              if (value!.isNotEmpty &&
-                                  !(Uri.tryParse(value)?.hasAbsolutePath ??
-                                      false)) {
-                                return 'Некорректний URL';
-                              }
-                              return null;
-                            },
+                                  validator: (value) => value!.isNotEmpty &&
+                                          !(Uri.tryParse(value)
+                                                  ?.hasAbsolutePath ??
+                                              false)
+                                      ? 'Некорректний URL'
+                                      : null,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: _addImageUrl,
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ElevatedButton.icon(
-                                onPressed: () =>
-                                    _pickImage(ImageSource.gallery),
+                                onPressed: _pickImagesFromGallery,
                                 icon: const Icon(Icons.photo_library),
                                 label: const Text("Галерея"),
                               ),
                               ElevatedButton.icon(
-                                onPressed: () => _pickImage(ImageSource.camera),
+                                onPressed: _pickImageFromCamera,
                                 icon: const Icon(Icons.camera_alt),
                                 label: const Text("Камера"),
                               ),
                             ],
                           ),
-                          if (_selectedImage != null)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Image.file(_selectedImage!),
-                            ),
-                          if (_imagePreviewUrl != null)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Image.network(_imagePreviewUrl!),
+                          const SizedBox(height: 10),
+                          if (_imageUrls.isNotEmpty ||
+                              _selectedImages.isNotEmpty)
+                            SizedBox(
+                              height: 100,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  ..._imageUrls.map((url) => Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Image.network(url,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover),
+                                      )),
+                                  ..._selectedImages.map((file) => Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Image.file(file,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover),
+                                      )),
+                                ],
+                              ),
                             ),
                           const SizedBox(height: 16),
                           SelectField(
@@ -446,8 +239,7 @@ Future<String?> uploadImageToFirebase(File imageFile) async {
     UploadTask uploadTask = storageRef.putFile(imageFile);
 
     TaskSnapshot snapshot = await uploadTask;
-    String downloadUrl = await snapshot.ref.getDownloadURL();
-    return downloadUrl;
+    return await snapshot.ref.getDownloadURL();
   } catch (e) {
     print("Ошибка загрузки: $e");
     return null;
