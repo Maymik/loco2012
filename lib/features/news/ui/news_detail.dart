@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,10 +61,16 @@ class NewsDetailScreen extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    news.images[index],
+                                  child: CachedNetworkImage(
+                                    imageUrl: news.images[index],
                                     width: 380,
                                     fit: BoxFit.cover,
+                                    placeholder: (context, url) => const Center(
+                                      child: FootballLoadingIndicator(),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error,
+                                            size: 50, color: Colors.red),
                                   ),
                                 ),
                               );
