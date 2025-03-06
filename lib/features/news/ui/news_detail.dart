@@ -1,13 +1,13 @@
-import 'package:auto_route/annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../widgets/custom_circular_indicator.dart';
 import '../cubit/news_detail_cubit.dart';
 import '../cubit/news_state.dart';
 
-@RoutePage(name: 'NewsDetailRoute')
 class NewsDetailScreen extends StatelessWidget {
   final String newsId;
 
@@ -78,6 +78,17 @@ class NewsDetailScreen extends StatelessWidget {
                           ),
                         ),
                       const SizedBox(height: 16),
+                      if (news.videos.isNotEmpty)
+                        Column(
+                          children: news.videos.map((videoUrl) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: VideoPlayerWidget(videoUrl: videoUrl),
+                            );
+                          }).toList(),
+                        ),
+                      const SizedBox(height: 16),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -103,5 +114,58 @@ class NewsDetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class VideoPlayerWidget extends StatefulWidget {
+  final String videoUrl;
+
+  const VideoPlayerWidget({super.key, required this.videoUrl});
+
+  @override
+  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+}
+
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  late VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePlayer();
+  }
+
+  Future<void> _initializePlayer() async {
+    _videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    await _videoPlayerController.initialize();
+
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      autoPlay: false,
+      looping: false,
+      aspectRatio: _videoPlayerController.value.aspectRatio,
+    );
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _chewieController != null &&
+            _chewieController!.videoPlayerController.value.isInitialized
+        ? SizedBox(
+            height: 250,
+            child: Chewie(controller: _chewieController!),
+          )
+        : const Center(child: FootballLoadingIndicator());
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController?.dispose();
+    super.dispose();
   }
 }
