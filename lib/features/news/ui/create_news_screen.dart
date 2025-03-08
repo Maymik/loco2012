@@ -221,6 +221,50 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                             ],
                           ),
                           const SizedBox(height: 10),
+                          if (_selectedImages.isNotEmpty)
+                            SizedBox(
+                              height: 100,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _selectedImages.length,
+                                itemBuilder: (context, index) {
+                                  return Stack(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          image: DecorationImage(
+                                            image: FileImage(
+                                                _selectedImages[index]),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.cancel,
+                                              color: Colors.red),
+                                          onPressed: () {
+                                            setState(() {
+                                              _selectedImages.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           SelectField(
                               onTap: () => _createNews(context),
                               text: 'Створити новину',
