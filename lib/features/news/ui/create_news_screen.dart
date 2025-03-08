@@ -207,20 +207,64 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                   label: const Text("Камера")),
                             ],
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          //   children: [
-                          //     ElevatedButton.icon(
-                          //         onPressed: _pickVideoFromGallery,
-                          //         icon: const Icon(Icons.video_library),
-                          //         label: const Text("Відео з галереї")),
-                          //     ElevatedButton.icon(
-                          //         onPressed: _pickVideoFromCamera,
-                          //         icon: const Icon(Icons.videocam),
-                          //         label: const Text("Записати відео")),
-                          //   ],
-                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton.icon(
+                                  onPressed: _pickVideoFromGallery,
+                                  icon: const Icon(Icons.video_library),
+                                  label: const Text("Відео з галереї")),
+                              ElevatedButton.icon(
+                                  onPressed: _pickVideoFromCamera,
+                                  icon: const Icon(Icons.videocam),
+                                  label: const Text("Записати відео")),
+                            ],
+                          ),
                           const SizedBox(height: 10),
+                          if (_selectedImages.isNotEmpty)
+                            SizedBox(
+                              height: 100,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _selectedImages.length,
+                                itemBuilder: (context, index) {
+                                  return Stack(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          image: DecorationImage(
+                                            image: FileImage(
+                                                _selectedImages[index]),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.cancel,
+                                              color: Colors.red),
+                                          onPressed: () {
+                                            setState(() {
+                                              _selectedImages.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           SelectField(
                               onTap: () => _createNews(context),
                               text: 'Створити новину',
