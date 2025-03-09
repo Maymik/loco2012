@@ -81,7 +81,7 @@ class PushNotificationService {
     try {
       _router!.push(NewsDetailRoute(newsId: payload));
     } catch (e) {
-      print("❌ Ошибка при переходе: \$e");
+      print("❌ Помилка е: \$e");
     }
   }
 
