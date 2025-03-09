@@ -100,7 +100,7 @@ class PushNotificationService {
 
     await _flutterLocalNotificationsPlugin.show(
       0,
-      message.notification?.title ?? 'Новое уведомление',
+      message.notification?.title ?? 'Нове повідомлення',
       message.notification?.body ?? '',
       details,
       payload: message.data['newsId'],
