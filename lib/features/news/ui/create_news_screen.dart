@@ -262,7 +262,7 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                 },
                               ),
                             ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           SelectField(
