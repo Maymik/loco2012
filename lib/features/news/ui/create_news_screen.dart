@@ -169,16 +169,28 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                         children: [
                           CustomTextFieldContainer(
                               controller: _titleController,
-                              labelText: 'Заголовок'),
+                            labelText: 'Заголовок',
+                            validator: (value) => value == null || value.isEmpty
+                                ? 'Поле не може бути пустим'
+                                : null,
+                          ),
                           const SizedBox(height: 16),
                           CustomTextFieldContainer(
                               controller: _authorController,
-                              labelText: 'Автор'),
+                            labelText: 'Автор',
+                            validator: (value) => value == null || value.isEmpty
+                                ? 'Поле не може бути пустим'
+                                : null,
+                          ),
                           const SizedBox(height: 16),
                           CustomTextFieldContainer(
                               controller: _newsController,
                               labelText: 'Зміст',
-                              maxLines: 3),
+                            maxLines: 5,
+                            validator: (value) => value == null || value.isEmpty
+                                ? 'Поле не може бути пустим'
+                                : null,
+                          ),
                           const SizedBox(height: 16),
                           Row(
                             children: [
