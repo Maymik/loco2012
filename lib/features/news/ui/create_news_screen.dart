@@ -219,19 +219,19 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                   label: const Text("Камера")),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton.icon(
-                                  onPressed: _pickVideoFromGallery,
-                                  icon: const Icon(Icons.video_library),
-                                  label: const Text("Відео з галереї")),
-                              ElevatedButton.icon(
-                                  onPressed: _pickVideoFromCamera,
-                                  icon: const Icon(Icons.videocam),
-                                  label: const Text("Записати відео")),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //   children: [
+                          //     ElevatedButton.icon(
+                          //         onPressed: _pickVideoFromGallery,
+                          //         icon: const Icon(Icons.video_library),
+                          //         label: const Text("Відео з галереї")),
+                          //     ElevatedButton.icon(
+                          //         onPressed: _pickVideoFromCamera,
+                          //         icon: const Icon(Icons.videocam),
+                          //         label: const Text("Записати відео")),
+                          //   ],
+                          // ),
                           const SizedBox(height: 10),
                           if (_selectedImages.isNotEmpty)
                             SizedBox(
