@@ -1,14 +1,12 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loco_2012/widgets/select_field.dart';
 
-import '../../../data/news_model.dart';
 import '../../../widgets/custom_circular_indicator.dart';
 import '../../../widgets/custom_text_field.dart';
+import '../../../widgets/select_field.dart';
 import '../cubit/news_cubit.dart';
 import '../cubit/news_state.dart';
 
@@ -41,9 +39,17 @@ class _CreateNewsViewState extends State<CreateNewsView> {
   List<File> _selectedImages = [];
   List<File> _selectedVideos = [];
   List<String> _imageUrls = [];
-  List<String> _videoUrls = [];
 
   bool _isLoading = false;
+
+  Future<void> _pickImagesFromGallery() async {
+    final pickedFiles = await ImagePicker().pickMultiImage();
+    if (pickedFiles.isNotEmpty) {
+      setState(() {
+        _selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
+      });
+    }
+  }
 
   Future<void> _pickImageFromCamera() async {
     final pickedFile =
@@ -55,18 +61,9 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     }
   }
 
-  Future<void> _pickImagesFromGallery() async {
-    final pickedFiles = await ImagePicker().pickMultiImage();
-    if (pickedFiles.isNotEmpty) {
-      setState(() {
-        _selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
-      });
-    }
-  }
-
-  Future<void> _pickVideoFromCamera() async {
+  Future<void> _pickVideoFromGallery() async {
     final pickedFile =
-        await ImagePicker().pickVideo(source: ImageSource.camera);
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _selectedVideos.add(File(pickedFile.path));
@@ -74,9 +71,9 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     }
   }
 
-  Future<void> _pickVideoFromGallery() async {
+  Future<void> _pickVideoFromCamera() async {
     final pickedFile =
-        await ImagePicker().pickVideo(source: ImageSource.gallery);
+        await ImagePicker().pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
         _selectedVideos.add(File(pickedFile.path));
@@ -98,46 +95,19 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     }
   }
 
-  Future<List<String>> _uploadImages() async {
-    List<String> uploadedUrls = [];
-    for (var image in _selectedImages) {
-      final url = await uploadImageToFirebase(image);
-      if (url != null) {
-        uploadedUrls.add(url);
-      }
-    }
-    return uploadedUrls;
-  }
-
-  Future<List<String>> _uploadVideos() async {
-    List<String> uploadedUrls = [];
-    for (var video in _selectedVideos) {
-      final url = await uploadVideoToFirebase(video);
-      if (url != null) {
-        uploadedUrls.add(url);
-      }
-    }
-    return uploadedUrls;
-  }
-
   Future<void> _createNews(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
 
-      List<String> uploadedImages = await _uploadImages();
-      List<String> uploadedVideos = await _uploadVideos();
+      await context.read<NewsCubit>().createNews(
+            title: _titleController.text,
+            author: _authorController.text,
+            newsContent: _newsController.text,
+            images: _selectedImages,
+            videos: _selectedVideos,
+            imageUrls: _imageUrls,
+          );
 
-      final news = NewsModel(
-        time: DateTime.now(),
-        news: _newsController.text,
-        author: _authorController.text,
-        title: _titleController.text,
-        id: '',
-        images: [..._imageUrls, ...uploadedImages],
-        videos: uploadedVideos,
-      );
-
-      await context.read<NewsCubit>().createNews(news);
       setState(() => _isLoading = false);
       Navigator.pop(context);
     }
@@ -148,11 +118,11 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
-        title: const Text("Нова новина",
-            style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.w600,
-                color: Colors.green)),
+        title: const Text(
+          "Нова новина",
+          style: TextStyle(
+              fontSize: 40, fontWeight: FontWeight.w600, color: Colors.green),
+        ),
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
@@ -168,7 +138,7 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                       child: Column(
                         children: [
                           CustomTextFieldContainer(
-                              controller: _titleController,
+                            controller: _titleController,
                             labelText: 'Заголовок',
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Поле не може бути пустим'
@@ -176,7 +146,7 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                           ),
                           const SizedBox(height: 16),
                           CustomTextFieldContainer(
-                              controller: _authorController,
+                            controller: _authorController,
                             labelText: 'Автор',
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Поле не може бути пустим'
@@ -184,8 +154,8 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                           ),
                           const SizedBox(height: 16),
                           CustomTextFieldContainer(
-                              controller: _newsController,
-                              labelText: 'Зміст',
+                            controller: _newsController,
+                            labelText: 'Зміст',
                             maxLines: 5,
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Поле не може бути пустим'
@@ -219,19 +189,19 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                   label: const Text("Камера")),
                             ],
                           ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          //   children: [
-                          //     ElevatedButton.icon(
-                          //         onPressed: _pickVideoFromGallery,
-                          //         icon: const Icon(Icons.video_library),
-                          //         label: const Text("Відео з галереї")),
-                          //     ElevatedButton.icon(
-                          //         onPressed: _pickVideoFromCamera,
-                          //         icon: const Icon(Icons.videocam),
-                          //         label: const Text("Записати відео")),
-                          //   ],
-                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton.icon(
+                                  onPressed: _pickVideoFromGallery,
+                                  icon: const Icon(Icons.video_library),
+                                  label: const Text("Відео з галереї")),
+                              ElevatedButton.icon(
+                                  onPressed: _pickVideoFromCamera,
+                                  icon: const Icon(Icons.videocam),
+                                  label: const Text("Записати відео")),
+                            ],
+                          ),
                           const SizedBox(height: 10),
                           if (_selectedImages.isNotEmpty)
                             SizedBox(
@@ -274,13 +244,12 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                 },
                               ),
                             ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 10),
                           SelectField(
-                              onTap: () => _createNews(context),
-                              text: 'Створити новину',
-                              backgroundColor: Colors.red),
+                            onTap: () => _createNews(context),
+                            text: 'Створити новину',
+                            backgroundColor: Colors.red,
+                          ),
                         ],
                       ),
                     ),
@@ -289,35 +258,5 @@ class _CreateNewsViewState extends State<CreateNewsView> {
         },
       ),
     );
-  }
-}
-
-Future<String?> uploadImageToFirebase(File imageFile) async {
-  try {
-    String fileName = "image_${DateTime.now().millisecondsSinceEpoch}.jpg";
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child('news_images/$fileName');
-    UploadTask uploadTask = storageRef.putFile(imageFile);
-
-    TaskSnapshot snapshot = await uploadTask;
-    return await snapshot.ref.getDownloadURL();
-  } catch (e) {
-    print("Ошибка загрузки изображения: $e");
-    return null;
-  }
-}
-
-Future<String?> uploadVideoToFirebase(File videoFile) async {
-  try {
-    String fileName = "video_${DateTime.now().millisecondsSinceEpoch}.mp4";
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child('news_videos/$fileName');
-    UploadTask uploadTask = storageRef.putFile(videoFile);
-
-    TaskSnapshot snapshot = await uploadTask;
-    return await snapshot.ref.getDownloadURL();
-  } catch (e) {
-    print("Ошибка загрузки видео: $e");
-    return null;
   }
 }
