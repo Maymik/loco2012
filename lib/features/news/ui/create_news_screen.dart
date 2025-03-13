@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../widgets/custom_circular_indicator.dart';
 import '../../../widgets/custom_text_field.dart';
@@ -204,7 +205,12 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                           ),
                           const SizedBox(height: 10),
                           if (_selectedImages.isNotEmpty)
-                            SizedBox(
+                            const Text(
+                              'Вибрані фото ',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                            ),
+                          SizedBox(
                               height: 100,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
@@ -244,6 +250,45 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                                 },
                               ),
                             ),
+                          if (_selectedVideos.isNotEmpty)
+                            Text(
+                              'Вибрані відео ',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                            ),
+                          SizedBox(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _selectedVideos.length,
+                              itemBuilder: (context, index) {
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      width: 100,
+                                      height: 100,
+                                      child: VideoThumbnail(
+                                          _selectedVideos[index].path),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.cancel,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          setState(() {
+                                            _selectedVideos.removeAt(index);
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
                           const SizedBox(height: 10),
                           SelectField(
                             onTap: () => _createNews(context),
@@ -258,5 +303,46 @@ class _CreateNewsViewState extends State<CreateNewsView> {
         },
       ),
     );
+  }
+}
+
+class VideoThumbnail extends StatefulWidget {
+  final String videoPath;
+
+  const VideoThumbnail(this.videoPath, {super.key});
+
+  @override
+  _VideoThumbnailState createState() => _VideoThumbnailState();
+}
+
+class _VideoThumbnailState extends State<VideoThumbnail> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(File(widget.videoPath))
+      ..initialize().then((_) {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _controller.value.isInitialized
+        ? AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: VideoPlayer(_controller),
+          )
+        : Container(
+            color: Colors.grey[300],
+            child: const Center(child: CircularProgressIndicator()),
+          );
   }
 }
