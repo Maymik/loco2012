@@ -205,7 +205,7 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                           ),
                           const SizedBox(height: 10),
                           if (_selectedImages.isNotEmpty)
-                            const Text(
+                            Text(
                               'Вибрані фото ',
                               style:
                                   TextStyle(fontSize: 20, color: Colors.black),
