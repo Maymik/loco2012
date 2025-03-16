@@ -130,7 +130,10 @@ class _CreateNewsViewState extends State<CreateNewsView> {
       body: BlocBuilder<NewsCubit, NewsState>(
         builder: (context, state) {
           return _isLoading
-              ? const Center(child: FootballLoadingIndicator())
+              ? const Center(
+                  child: FootballLoadingIndicator(
+                  size: 80,
+                ))
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Form(
