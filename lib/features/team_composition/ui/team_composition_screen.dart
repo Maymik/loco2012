@@ -31,8 +31,10 @@ class TeamCompositionScreen extends StatelessWidget {
                   initial: () => const Center(
                     child: Text(''),
                   ),
-                  loading: () =>
-                      const Center(child: FootballLoadingIndicator()),
+                  loading: () => const Center(
+                      child: FootballLoadingIndicator(
+                    size: 80,
+                  )),
                   loaded: (teamPlayers) => ListView.builder(
                     itemCount: teamPlayers.length,
                     itemBuilder: (context, index) {
