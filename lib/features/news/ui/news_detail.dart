@@ -41,7 +41,10 @@ class NewsDetailScreen extends StatelessWidget {
           builder: (context, state) {
             return state.when(
               initial: () => const Center(child: SizedBox.shrink()),
-              loading: () => const Center(child: FootballLoadingIndicator()),
+              loading: () => const Center(
+                  child: FootballLoadingIndicator(
+                size: 80,
+              )),
               loaded: (newsList) {
                 final news = newsList.first;
                 return SingleChildScrollView(

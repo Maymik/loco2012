@@ -46,7 +46,10 @@ class MainContentState extends State<MainContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pageController == null
-          ? const Center(child: FootballLoadingIndicator())
+          ? const Center(
+              child: FootballLoadingIndicator(
+              size: 80,
+            ))
           : PageView(
               controller: _pageController,
               onPageChanged: (index) {

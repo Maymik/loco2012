@@ -25,7 +25,10 @@ class TournamentsScreen extends StatelessWidget {
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: Text('')),
-            loading: () =>  const Center(child: FootballLoadingIndicator()),
+            loading: () => const Center(
+                child: FootballLoadingIndicator(
+              size: 80,
+            )),
             loaded: (tournaments) => ListView.builder(
               itemCount: tournaments.length,
               itemBuilder: (context, index) {

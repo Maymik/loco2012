@@ -27,7 +27,10 @@ class ScheduleScreen extends StatelessWidget {
               Expanded(
                 child: state.when(
                   initial: () => const Center(child: Text('')),
-                  loading: () => const Center(child: FootballLoadingIndicator()),
+                  loading: () => const Center(
+                      child: FootballLoadingIndicator(
+                    size: 80,
+                  )),
                   loaded: (scheduleList) => ListView.builder(
                     itemCount: scheduleList.length,
                     itemBuilder: (context, index) {

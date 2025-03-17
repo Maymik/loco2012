@@ -24,7 +24,10 @@ class NewsScreen extends StatelessWidget {
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: Text('')),
-            loading: () => const Center(child: FootballLoadingIndicator()),
+            loading: () => const Center(
+                child: FootballLoadingIndicator(
+              size: 80,
+            )),
             loaded: (newsList) => ListView.builder(
               itemCount: newsList.length,
               itemBuilder: (context, index) {
