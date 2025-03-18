@@ -37,9 +37,9 @@ class _CreateNewsViewState extends State<CreateNewsView> {
   final TextEditingController _newsController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
 
-  List<File> _selectedImages = [];
-  List<File> _selectedVideos = [];
-  List<String> _imageUrls = [];
+  final List<File> _selectedImages = [];
+  final List<File> _selectedVideos = [];
+  final List<String> _imageUrls = [];
 
   bool _isLoading = false;
 
