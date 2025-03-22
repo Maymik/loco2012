@@ -5,6 +5,7 @@ import 'package:loco_2012/utils/firebase_messaging_service.dart';
 import 'package:loco_2012/utils/notification_service.dart';
 import 'package:loco_2012/utils/service_locator.dart';
 
+//import 'package:firebase_analytics/firebase_analytics.dart';
 import 'features/coaches/cubit/coaches_cubit.dart';
 import 'features/news/cubit/news_cubit.dart';
 import 'features/phone_auth/cubit/phone_auth_cubit.dart';
@@ -25,6 +26,7 @@ void main() async {
   final appRouter = AppRouter();
   PushNotificationService().init(appRouter);
   NotificationService().init(appRouter);
+  //final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   runApp(MyApp(appRouter: appRouter));
 }
 
