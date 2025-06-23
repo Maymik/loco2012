@@ -41,8 +41,6 @@ class _CreateNewsViewState extends State<CreateNewsView> {
   final List<File> _selectedVideos = [];
   final List<String> _imageUrls = [];
 
-  bool _isLoading = false;
-
   Future<void> _pickImagesFromGallery() async {
     final pickedFiles = await ImagePicker().pickMultiImage();
     if (pickedFiles.isNotEmpty) {
@@ -96,11 +94,9 @@ class _CreateNewsViewState extends State<CreateNewsView> {
     }
   }
 
-  Future<void> _createNews(BuildContext context) async {
+  void _createNews(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isLoading = true);
-
-      await context.read<NewsCubit>().createNews(
+      context.read<NewsCubit>().createNews(
             title: _titleController.text,
             author: _authorController.text,
             newsContent: _newsController.text,
@@ -108,9 +104,6 @@ class _CreateNewsViewState extends State<CreateNewsView> {
             videos: _selectedVideos,
             imageUrls: _imageUrls,
           );
-
-      setState(() => _isLoading = false);
-      Navigator.pop(context);
     }
   }
 
@@ -127,182 +120,187 @@ class _CreateNewsViewState extends State<CreateNewsView> {
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
-      body: BlocBuilder<NewsCubit, NewsState>(
+      body: BlocConsumer<NewsCubit, NewsState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            initial: () => Navigator.pop(context),
+            error: (message) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Помилка: $message')),
+            ),
+            orElse: () {},
+          );
+        },
         builder: (context, state) {
-          return _isLoading
-              ? const Center(
-                  child: FootballLoadingIndicator(
-                  size: 80,
-                ))
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                      child: Column(
+          return state.maybeWhen(
+            loading: () => const Center(
+              child: FootballLoadingIndicator(size: 80),
+            ),
+            orElse: () => Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      CustomTextFieldContainer(
+                        controller: _titleController,
+                        labelText: 'Заголовок',
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Поле не може бути пустим'
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextFieldContainer(
+                        controller: _authorController,
+                        labelText: 'Автор',
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Поле не може бути пустим'
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextFieldContainer(
+                        controller: _newsController,
+                        labelText: 'Зміст',
+                        maxLines: 5,
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Поле не може бути пустим'
+                            : null,
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
                         children: [
-                          CustomTextFieldContainer(
-                            controller: _titleController,
-                            labelText: 'Заголовок',
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Поле не може бути пустим'
-                                : null,
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextFieldContainer(
-                            controller: _authorController,
-                            labelText: 'Автор',
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Поле не може бути пустим'
-                                : null,
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextFieldContainer(
-                            controller: _newsController,
-                            labelText: 'Зміст',
-                            maxLines: 5,
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Поле не може бути пустим'
-                                : null,
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomTextFieldContainer(
-                                  controller: _imageUrlController,
-                                  labelText: 'URL зображення',
-                                ),
-                              ),
-                              IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: _addImageUrl),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton.icon(
-                                  onPressed: _pickImagesFromGallery,
-                                  icon: const Icon(Icons.photo_library),
-                                  label: const Text("Галерея")),
-                              ElevatedButton.icon(
-                                  onPressed: _pickImageFromCamera,
-                                  icon: const Icon(Icons.camera_alt),
-                                  label: const Text("Камера")),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton.icon(
-                                  onPressed: _pickVideoFromGallery,
-                                  icon: const Icon(Icons.video_library),
-                                  label: const Text("Відео з галереї")),
-                              ElevatedButton.icon(
-                                  onPressed: _pickVideoFromCamera,
-                                  icon: const Icon(Icons.videocam),
-                                  label: const Text("Записати відео")),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          if (_selectedImages.isNotEmpty)
-                            Text(
-                              'Вибрані фото ',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
-                            ),
-                          SizedBox(
-                              height: 100,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _selectedImages.length,
-                                itemBuilder: (context, index) {
-                                  return Stack(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          image: DecorationImage(
-                                            image: FileImage(
-                                                _selectedImages[index]),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: IconButton(
-                                          icon: const Icon(Icons.cancel,
-                                              color: Colors.red),
-                                          onPressed: () {
-                                            setState(() {
-                                              _selectedImages.removeAt(index);
-                                            });
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                          if (_selectedVideos.isNotEmpty)
-                            Text(
-                              'Вибрані відео ',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
-                            ),
-                          SizedBox(
-                            height: 100,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _selectedVideos.length,
-                              itemBuilder: (context, index) {
-                                return Stack(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 5),
-                                      width: 100,
-                                      height: 100,
-                                      child: VideoThumbnail(
-                                          _selectedVideos[index].path),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      child: IconButton(
-                                        icon: const Icon(Icons.cancel,
-                                            color: Colors.red),
-                                        onPressed: () {
-                                          setState(() {
-                                            _selectedVideos.removeAt(index);
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                );
-                              },
+                          Expanded(
+                            child: CustomTextFieldContainer(
+                              controller: _imageUrlController,
+                              labelText: 'URL зображення',
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          SelectField(
-                            onTap: () => _createNews(context),
-                            text: 'Створити новину',
-                            backgroundColor: Colors.red,
-                          ),
+                          IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: _addImageUrl),
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton.icon(
+                              onPressed: _pickImagesFromGallery,
+                              icon: const Icon(Icons.photo_library),
+                              label: const Text("Галерея")),
+                          ElevatedButton.icon(
+                              onPressed: _pickImageFromCamera,
+                              icon: const Icon(Icons.camera_alt),
+                              label: const Text("Камера")),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton.icon(
+                              onPressed: _pickVideoFromGallery,
+                              icon: const Icon(Icons.video_library),
+                              label: const Text("Відео з галереї")),
+                          ElevatedButton.icon(
+                              onPressed: _pickVideoFromCamera,
+                              icon: const Icon(Icons.videocam),
+                              label: const Text("Записати відео")),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      if (_selectedImages.isNotEmpty)
+                        const Text(
+                          'Вибрані фото ',
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
+                      SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _selectedImages.length,
+                            itemBuilder: (context, index) {
+                              return Stack(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      image: DecorationImage(
+                                        image:
+                                            FileImage(_selectedImages[index]),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.cancel,
+                                          color: Colors.red),
+                                      onPressed: () {
+                                        setState(() {
+                                          _selectedImages.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          )),
+                      if (_selectedVideos.isNotEmpty)
+                        const Text(
+                          'Вибрані відео ',
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
+                      SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _selectedVideos.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  width: 100,
+                                  height: 100,
+                                  child: VideoThumbnail(
+                                      _selectedVideos[index].path),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.cancel,
+                                        color: Colors.red),
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedVideos.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      SelectField(
+                        onTap: () => _createNews(context),
+                        text: 'Створити новину',
+                        backgroundColor: Colors.red,
+                      ),
+                    ],
                   ),
-                );
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
